@@ -4,8 +4,20 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.allen.testMyBatis.VehicleMapper">
 
+    <select id="selectVehicleWithFetchSize" resultType="com.allen.testMyBatis.Vehicle" fetchSize="1000">
+        select * from vehicle where id &lt;= #{id};
+    </select>
+
     <select id="selectVehicle" resultType="com.allen.testMyBatis.Vehicle">
         select * from vehicle where id &lt;= #{id};
+    </select>
+
+    <select id="selectVehicleWithFlow" resultSetType="FORWARD_ONLY" resultType="com.allen.testMyBatis.Vehicle" fetchSize="-2147483648">
+        select * from vehicle where id &lt;= #{id};
+    </select>
+
+    <select id="selectOneVehicle" resultType="com.allen.testMyBatis.Vehicle">
+        select * from vehicle where id = #{id};
     </select>
 
 </mapper>
