@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <environments default="perf">
+        <environment id="perf">
+            <transactionManager type="JDBC"/>
+<!--            <dataSource type="com.allen.testmybatis.HikariDataSource">-->
+<!--&lt;!&ndash;                <property name="driver" value="com.mysql.jdbc.Driver"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                <property name="url" value="jdbc:mysql://10.200.1.32:3306/scenario_engine_cloud"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                <property name="username" value="root"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                <property name="password" value="6SBzj9H@uB1q#"/>&ndash;&gt;-->
+<!--                <property name="driverClassName" value="com.mysql.jdbc.Driver"/>-->
+<!--                <property name="jdbcUrl" value="jdbc:mysql://10.200.1.32:3306/scenario_engine_cloud"/>-->
+<!--                <property name="username" value="root"/>-->
+<!--                <property name="password" value="6SBzj9H@uB1q#"/>-->
+<!--                <property name="maximumPoolSize" value="5"/>-->
+<!--&lt;!&ndash;                <property name="minimumIdle" value="10"/>&ndash;&gt;-->
+<!--            </dataSource>-->
+            <dataSource type="com.allen.testMyBatis.HikariDataSource">
+<!--                <property name="driverClassName" value="com.mysql.jdbc.Driver"/>-->
+                <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
+                <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/master_vehicle"/>
+                <property name="username" value="root"/>
+                <property name="password" value="123456"/>
+                <property name="maximumPoolSize" value="5"/>
+            </dataSource>
+        </environment>
+    </environments>
+    <mappers>
+<!--        <mapper resource="scenarioMapper.xml"/>-->
+        <mapper resource="VehicleMapper.xml"/>
+    </mappers>
+</configuration>

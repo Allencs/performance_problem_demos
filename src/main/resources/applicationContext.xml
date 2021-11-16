@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!--
+    如果想要将自定义的bean对象添加到IOC容器中，需要在类上添加某些注解
+    Spring中包含4个主要的组件添加注解：
+    @Controller:控制器，推荐给controller层添加此注解
+    @Service:业务逻辑，推荐给业务逻辑层添加此注解
+    @Repository:仓库管理，推荐给数据访问层添加此注解
+    @Component:给不属于以上基层的组件添加此注解
+    注意：我们虽然人为的给不同的层添加不同的注解，但是在spring看来，可以在任意层添加任意注解
+           spring底层是不会给具体的层次验证注解，这样写的目的只是为了提高可读性，最偷懒的方式
+           就是给所有想交由IOC容器管理的bean对象添加component注解
+
+    使用注解需要如下步骤：
+    1、添加上述四个注解中的任意一个
+    2、添加自动扫描注解的组件，此操作需要依赖context命名空间
+    3、添加自动扫描的标签context:component-scan
+
+	注意：当使用注解注册组件和使用配置文件注册组件是一样的，但是要注意：
+		1、组件的id默认就是组件的类名首字符小写，如果非要改名字的话，直接在注解中添加即可
+		2、组件默认情况下都是单例的,如果需要配置多例模式的话，可以在注解下添加@Scope注解
+    -->
+    <!--
+    定义自动扫描的基础包:
+    base-package:指定扫描的基础包，spring在启动的时候会将基础包及子包下所有加了注解的类都自动
+                扫描进IOC容器
+    -->
+    <context:component-scan base-package="com.allen.springIoc"></context:component-scan>
+</beans>
