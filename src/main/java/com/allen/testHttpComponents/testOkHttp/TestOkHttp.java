@@ -1,4 +1,4 @@
-package com.allen.httpComponents.testOkHttp;
+package com.allen.testHttpComponents.testOkHttp;
 
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
