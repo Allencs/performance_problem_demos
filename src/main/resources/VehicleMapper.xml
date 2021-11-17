@@ -4,7 +4,8 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.allen.testMyBatis.VehicleMapper">
 
-    <select id="selectVehicleWithFetchSize" resultType="com.allen.testMyBatis.Vehicle" fetchSize="1000">
+    <!-- 需要在MySQL连接url中添加参数useCursorFetch，fetchSize参数才生效 -->
+    <select id="selectVehicleWithFetchSize" resultType="com.allen.testMyBatis.Vehicle" fetchSize="500">
         select * from vehicle where id &lt;= #{id};
     </select>
 
@@ -12,6 +13,7 @@
         select * from vehicle where id &lt;= #{id};
     </select>
 
+    <!-- {resultSetType=FORWARD_ONLY, fetchSize=Integer.MIN_VALUE} -> 开启流式查询 -->
     <select id="selectVehicleWithFlow" resultSetType="FORWARD_ONLY" resultType="com.allen.testMyBatis.Vehicle" fetchSize="-2147483648">
         select * from vehicle where id &lt;= #{id};
     </select>
