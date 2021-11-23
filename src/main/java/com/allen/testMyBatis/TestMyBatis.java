@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.*;
 
 public class TestMyBatis {
@@ -41,32 +42,37 @@ public class TestMyBatis {
     public static void main(String[] args) throws IOException, InterruptedException {
         Deque<Callable<List<Vehicle>>> arrayDeque = new ArrayDeque<>(10);
         TestMyBatis testMyBatis = new TestMyBatis();
-//        CountDownLatch countDownLatch = new CountDownLatch(10);
-//        for (int i = 0; i < 10; i++) {
-//            new Thread(() -> {
-//                Random random=new Random();
-//                Scenario scenario = testMyBatis.session.selectOne("com.allen.testmybatis.scenarioMapper.selectScenario", random.nextInt(10));
-//                System.out.println(scenario);
-//                try {
-//                    countDownLatch.await();
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//            }).start();
-//        }
-//
-//        Thread.sleep(60000);
-//        for (int j = 0; j < 10; j++) {
-//            countDownLatch.countDown();
-//        }
-//        System.out.println("All thread down...");
+        CountDownLatch countDownLatch = new CountDownLatch(10);
+        for (int i = 0; i < 10; i++) {
+            new Thread(() -> {
+                Random random=new Random();
+                Vehicle vehicle = testMyBatis.session.selectOne("selectOneVehicle", random.nextInt(50));
+                logger.info(vehicle.toString());
+                try {
+                    countDownLatch.await();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }).start();
+        }
 
-        Vehicle vehicle = testMyBatis.session.selectOne("selectOneVehicle", 1);
-        logger.info(vehicle.toString());
+        Thread.sleep(5000);
+        for (int j = 0; j < 10; j++) {
+            countDownLatch.countDown();
+        }
+
+        Callable<List<Vehicle>> selectVehicle = () -> {
+            long startTime=System.currentTimeMillis();
+            List<Vehicle> list = testMyBatis.session.selectList("selectVehicle", 10000);
+            logger.info("selectVehicle --> 耗时： " + (System.currentTimeMillis() - startTime));
+            return list;
+        };
+        arrayDeque.offer(selectVehicle);
+        arrayDeque.offer(selectVehicle);
 
         Callable<List<Vehicle>> selectVehicleWithFlow = () -> {
             long startTime=System.currentTimeMillis();
-            List<Vehicle> list = testMyBatis.session.selectList("selectVehicleWithFlow", 5000);
+            List<Vehicle> list = testMyBatis.session.selectList("selectVehicleWithFlow", 10000);
             logger.info("selectVehicleWithFlow --> 耗时： " + (System.currentTimeMillis() - startTime));
             return list;
         };
@@ -75,21 +81,12 @@ public class TestMyBatis {
 
         Callable<List<Vehicle>> selectVehicleWithFetchSize = () -> {
             long startTime=System.currentTimeMillis();
-            List<Vehicle> list = testMyBatis.session.selectList("selectVehicleWithFetchSize", 5000);
+            List<Vehicle> list = testMyBatis.session.selectList("selectVehicleWithFetchSize", 10000);
             logger.info("selectVehicleWithFetchSize --> 耗时： " + (System.currentTimeMillis() - startTime));
             return list;
         };
         arrayDeque.offer(selectVehicleWithFetchSize);
         arrayDeque.offer(selectVehicleWithFetchSize);
-
-        Callable<List<Vehicle>> selectVehicle = () -> {
-            long startTime=System.currentTimeMillis();
-            List<Vehicle> list = testMyBatis.session.selectList("selectVehicle", 5000);
-            logger.info("selectVehicle --> 耗时： " + (System.currentTimeMillis() - startTime));
-            return list;
-        };
-        arrayDeque.offer(selectVehicle);
-        arrayDeque.offer(selectVehicle);
 
         while (true) {
             Callable task = arrayDeque.poll();
