@@ -1,7 +1,6 @@
 package com.allen.classLoader;
 
 
-import com.allen.testLog.TestLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,6 +1,5 @@
 package com.allen.aboutBuffer;
 
-import com.allen.testLog.TestLog;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
 import org.apache.http.client.methods.CloseableHttpResponse;
