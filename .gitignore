@@ -9,6 +9,8 @@ target/
 .recommenders/
 *.iml
 **/build/
+rollings/
 .gradle
 *.log
 .DS_Store
+*.gz
