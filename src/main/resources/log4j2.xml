@@ -88,7 +88,7 @@
         </RollingFile>
 
         <!--Disruptor异步日志，gz后缀默认使用JDK的Deflater进行压缩【新建RollingFileManager线程执行】-->
-        <RollingRandomAccessFile name="RandomAccessFile" fileName="async-log4j2.log" immediateFlush="true" append="false"
+        <RollingRandomAccessFile name="RandomAccessFile" fileName="async-log4j2.log" immediateFlush="false" append="false"
                           filePattern="${FILE_PATH}/rollings/async-testLog4j2-%d{yyyy-MM-dd}_%i.log.gz">
             <PatternLayout>
                 <Pattern>${LOG_PATTERN}</Pattern>
