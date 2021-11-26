@@ -98,9 +98,7 @@
                 <TimeBasedTriggeringPolicy interval="1" modulate="true" />
                 <SizeBasedTriggeringPolicy size="100MB"/>
             </Policies>
-<!--            <DefaultRolloverStrategy compressionLevel="0"/>-->
             <DefaultRolloverStrategy max="100" compressionLevel="0"/>
-<!--            <DefaultRolloverStrategy max="100"/>-->
         </RollingRandomAccessFile>
 
         <!--启用异步日志，阻塞队列最大容量为20000，超出队列容量时是否等待日志输出，不等待将直接将日志丢弃-->
