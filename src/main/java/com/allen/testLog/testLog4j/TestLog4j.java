@@ -6,6 +6,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.LockSupport;
 
 public class TestLog4j {
 
@@ -34,5 +35,6 @@ public class TestLog4j {
 
     public static void main(String[] args) {
         new TestLog4j().testLog();
+        LockSupport.parkNanos(1);
     }
 }

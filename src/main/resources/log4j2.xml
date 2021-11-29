@@ -89,7 +89,7 @@
 <!--immediateFlush="false"-->
         <!--Disruptor异步日志，gz后缀默认使用JDK的Deflater进行压缩【新建RollingFileManager线程执行】-->
         <RollingRandomAccessFile name="RandomAccessFile" fileName="${FILE_PATH}/async-log4j2.log" append="false"
-                          filePattern="${FILE_PATH}/rollings/async-testLog4j2-%d{yyyy-MM-dd}_%i.log.gz">
+                          filePattern="${FILE_PATH}/rollings/async-testLog4j2-%d{yyyy-MM-dd}_%i.log">
             <PatternLayout>
                 <Pattern>${LOG_PATTERN}</Pattern>
             </PatternLayout>
@@ -135,16 +135,16 @@
         -Dlog4j2.contextSelector=org.apache.logging.log4j.core.async.AsyncLoggerContextSelector-->
 
         <!--disruptor异步日志-->
-        <AsyncLogger name="DisruptorLogger" level="info" includeLocation="false">
+        <asyncLogger name="DisruptorLogger" level="info" includeLocation="false">
             <AppenderRef ref="RandomAccessFile"/>
-        </AsyncLogger>
+        </asyncLogger>
 
         <!--必须配置Asyncroot disruptor才生效【除非添加环境变量
         -Dlog4j2.contextSelector=org.apache.logging.log4j.core.async.AsyncLoggerContextSelector
         开启全异步模式】（测试下来好像这种mix模式和使用Asyncroot线程栈看上去没啥区别？？？）-->
-        <Asyncroot level="info" includeLocation="false">
+        <asyncRoot level="info" includeLocation="false">
             <appender-ref ref="RandomAccessFile"/>
-        </Asyncroot>
+        </asyncRoot>
 
         <!--root 节点用来指定项目的根日志，level:日志输出级别，共有8个级别，按照从低到高为：All < Trace < Debug < Info < Warn < Error < Fatal < OFF.-->
 <!--        <root level="info">-->
