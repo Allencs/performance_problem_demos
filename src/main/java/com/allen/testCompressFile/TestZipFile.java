@@ -1,5 +1,6 @@
 package com.allen.testCompressFile;
 
+import javax.swing.filechooser.FileSystemView;
 import java.io.*;
 import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
@@ -8,9 +9,10 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 public class TestZipFile {
-
-    private static String ZIP_FILE = "/Users/chensheng/Desktop/pexels-hert-niks.zip";
-    private static String JPG_FILE = "/Users/chensheng/Desktop/jpegFiles/pexels-hert-niks-3224115.jpg";
+    // 获取桌面绝对路径
+    static String homeDirectory = FileSystemView.getFileSystemView().getHomeDirectory().getAbsolutePath();
+    private static String ZIP_FILE = homeDirectory + "/Desktop/pexels-hert-niks.zip";
+    private static String JPG_FILE = "jpgFiles/pexels-hert-niks-3224115.jpg";
 
     /**
      * 使用普通流读写文件（FileInputStream、FileOutputStream）
@@ -98,8 +100,8 @@ public class TestZipFile {
     }
 
     public static void main(String[] args) {
-//        zipFileNormal(ZIP_FILE, JPG_FILE);
+        zipFileNormal(ZIP_FILE, JPG_FILE);
         zipFileWithBuffer(ZIP_FILE, JPG_FILE);
-//        zipFileWithChannel(ZIP_FILE, JPG_FILE);
+        zipFileWithChannel(ZIP_FILE, JPG_FILE);
     }
 }
