@@ -159,4 +159,31 @@ public final class RingBuffer<E> extends RingBufferFields<E> implements Cursored
 }
 ```
 
-// 无锁
+---
+## 关于java的DirectBuffer
+参考知乎问答 [Java NIO中，关于DirectBuffer，HeapBuffer的疑问？](https://www.zhihu.com/question/57374068/answer/153398427)
+`DirectBuffer`本身这个对象是在堆中，但是引用了一块非堆的native memory，这块内存实际上还是属于java进程的内存中，这个角度说的话，
+`DirectBuffer`是在用户内存中。
+- `DirectBuffer`的好处是减少了一次从jvm heap到native memory的copy操作（究其原因：堆内存在GC，对象地址可能会移动；除了CMS标记整理， 
+其他垃圾收集算法都会做复制移动整理）；
+- 这里还存在一个问题，如果设计操作系统底层的操作，**native memory的数据是否要copy到kernel buffer？？**。「个人感觉应该是这样」
+
+### java中针对这些copy操作的优化
+#### 1. `DirectBuffer`「上面已经提到」
+
+#### 2. `MappedByteBuffer`
+映射出一个`DirectByteBuffer`，使用的是native memory「用户缓冲区」，然后利用底层的mmap技术（内存映射（memory map）），将java进程中这块native memory
+映射到内核缓冲区中的文件所在地址。 这里其实减少了一次read()的系统调用，即少一次用户态到内核态的切换。「两次系统调用：1、mmap 2、write」
+- 原本的一次本地文件读写操作流程是：【 `disk -> kernel buffer -> user buffer[native memory如果是直接内存就没有copy到heap的操作，native memory其实可以理解成c语言的heap，因此所有的native方法的调用都会涉及native memory] -> jvm heap`，写入操作就反过来】
+- 使用mmap后的读写流程：【`disk -> kernel buffer -> disk`】，如果是将磁盘文件发送到网络，流程是这样的：【`disk -> kernel buffer -> socket buffer -> network interface`】
+
+使用demo待补充
+
+#### 3. NIO Channel `transferTo` & `transferFrom`
+利用底层sendfile()技术，即发起一次系统调用，在内核态完成所有的数据传递。
+发送磁盘文件到网络：`disk -> kernel buffer -> socket buffer -> network interface`
+
+#### 3. NIO Channel `Pipe`
+
+
+
