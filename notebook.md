@@ -167,7 +167,78 @@ public final class RingBuffer<E> extends RingBufferFields<E> implements Cursored
 - `DirectBuffer`的好处是减少了一次从jvm heap到native memory的copy操作（究其原因：堆内存在GC，对象地址可能会移动；除了CMS标记整理， 
 其他垃圾收集算法都会做复制移动整理）；
 - 这里还存在一个问题，如果设计操作系统底层的操作，**native memory的数据是否要copy到kernel buffer？？**。「个人感觉应该是这样」
-
+> 可以从hotspot找到验证，其中会将C的buf拷贝到java的数组jbyteArray【写的时候也是需要先将java数组copy到C数组】：
+```aidl
+// jdk/src/share/native/java/io/FileInputStream.c
+JNIEXPORT jint JNICALL
+Java_java_io_FileInputStream_readBytes(JNIEnv *env, jobject this,
+        jbyteArray bytes, jint off, jint len) {
+    return readBytes(env, this, bytes, off, len, fis_fd);
+}
+// jdk/src/share/native/java/io/io_util.c
+/*
+ * The maximum size of a stack-allocated buffer.
+ * 栈上能分配的最大buffer大小
+ */
+#define BUF_SIZE 8192
+jint
+readBytes(JNIEnv *env, jobject this, jbyteArray bytes,
+          jint off, jint len, jfieldID fid)
+{
+    jint nread;
+    char stackBuf[BUF_SIZE]; // BUF_SIZE=8192
+    char *buf = NULL;
+    FD fd;
+    // 传入的Java byte数组不能是null
+    if (IS_NULL(bytes)) {
+        JNU_ThrowNullPointerException(env, NULL);
+        return -1;
+    }
+    // off，len参数是否越界判断
+    if (outOfBounds(env, off, len, bytes)) {
+        JNU_ThrowByName(env, "java/lang/IndexOutOfBoundsException", NULL);
+        return -1;
+    }
+    // 如果要读取的长度是0，直接返回读取长度0
+    if (len == 0) {
+        return 0;
+    } else if (len > BUF_SIZE) {
+        // 如果要读取的长度大于BUF_SIZE，则不能在栈上分配空间了，需要在堆上分配空间
+        buf = malloc(len);
+        if (buf == NULL) {
+            // malloc分配失败，抛出OOM异常
+            JNU_ThrowOutOfMemoryError(env, NULL);
+            return 0;
+        }
+    } else {
+        buf = stackBuf;
+    }
+    // 获取记录在FileDescriptor中的文件描述符
+    fd = GET_FD(this, fid);
+    if (fd == -1) {
+        JNU_ThrowIOException(env, "Stream Closed");
+        nread = -1;
+    } else {
+        // 调用IO_Read读取
+        nread = IO_Read(fd, buf, len);
+        if (nread > 0) {
+            // 读取成功后，从buf拷贝数据到Java的byte数组中
+            (*env)->SetByteArrayRegion(env, bytes, off, nread, (jbyte *)buf);
+        } else if (nread == -1) {
+            // read系统调用返回-1是读取失败
+            JNU_ThrowIOExceptionWithLastError(env, "Read error");
+        } else { /* EOF */
+            // 操作系统read读取返回0认为是读取结束，Java中返回-1认为是读取结束
+            nread = -1;
+        }
+    }
+    // 如果使用的是堆空间（len > BUF_SIZE），需要手动释放
+    if (buf != stackBuf) {
+        free(buf);
+    }
+    return nread;
+}
+```
 ### java中针对这些copy操作的优化
 #### 1. `DirectBuffer`「上面已经提到」
 
