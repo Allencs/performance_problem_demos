@@ -160,6 +160,7 @@ public final class RingBuffer<E> extends RingBufferFields<E> implements Cursored
 ```
 
 ---
+> 因为一个文件读写调优，又学了一遍Linux zero-copy和java中的各种Buffer
 ## 关于java的DirectBuffer
 参考知乎问答 [Java NIO中，关于DirectBuffer，HeapBuffer的疑问？](https://www.zhihu.com/question/57374068/answer/153398427)
 `DirectBuffer`本身这个对象是在堆中，但是引用了一块非堆的native memory，这块内存实际上还是属于java进程的内存中，这个角度说的话，
