@@ -7,7 +7,7 @@ public class CommonTestEntity {
     }
 
     public CommonTestEntity() {
-        System.out.println(this.getClass() + " ｜ CommonTestEntity实例初始化 | " + this.getClass().getClassLoader());
+        System.out.println("ClassName: " + this.getClass().getName() + " ｜ CommonTestEntity实例初始化 | ClassLoader: " + this.getClass().getClassLoader());
     }
 
     public void defaultMethod() {

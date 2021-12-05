@@ -1,6 +1,6 @@
 package com.allen.queue;
 
-import com.allen.Tuple;
+//import com.allen.Tuple;
 
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
@@ -13,6 +13,7 @@ public class test_queue {
     final static ArrayBlockingQueue arrayBlockingQueue = new ArrayBlockingQueue(1000);
     final static ConcurrentHashMap concurrentHashMap = new ConcurrentHashMap();
 
+    /**
     public static void main(String[] args) {
 
         new Thread(() -> {
@@ -46,5 +47,5 @@ public class test_queue {
                 }
             }
         }).start();
-    }
+    }*/
 }

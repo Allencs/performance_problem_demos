@@ -1,4 +1,4 @@
-package com.allen.cglibproxy;
+package com.allen.testDynamicProxy.cglibProxy;
 
 
 /**
