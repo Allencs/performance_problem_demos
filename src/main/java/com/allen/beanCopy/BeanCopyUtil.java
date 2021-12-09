@@ -3,14 +3,17 @@ package com.allen.beanCopy;
 import net.sf.cglib.beans.BeanCopier;
 import net.sf.cglib.beans.BeanMap;
 import org.springframework.objenesis.ObjenesisStd;
-
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+
+/**
+ * apache BeanUtils性能比较差，推荐使用CGLIB提供的BeanCopier；
+ * CGLIB BeanCopier使用demo
+ */
 public final class BeanCopyUtil {
     private BeanCopyUtil() {
     }
@@ -66,7 +69,7 @@ public final class BeanCopyUtil {
         if ((beanCopier = cache.get(key)) != null){
             return beanCopier;
         }
-        beanCopier = BeanCopier.create(source.getClass(), target.getClass(), false);
+        beanCopier = BeanCopier.create(source, target, false);
         cache.put(key, beanCopier);
         return beanCopier;
     }

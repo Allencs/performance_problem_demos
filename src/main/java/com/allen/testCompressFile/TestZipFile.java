@@ -167,7 +167,7 @@ public class TestZipFile {
                 }
                 directBuffer.clear();
             }
-            System.out.println("zipFileNormalByteBuffer耗时：" + (System.currentTimeMillis() - startTime));
+            System.out.println("zipFileNormalDirectBuffer耗时：" + (System.currentTimeMillis() - startTime));
         } catch (IOException e) {
             e.printStackTrace();
         }

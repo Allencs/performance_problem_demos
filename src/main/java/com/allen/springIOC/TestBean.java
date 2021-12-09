@@ -1,4 +1,4 @@
-package com.allen.springIoc;
+package com.allen.springIOC;
 
 import com.allen.commons.entity.Person;
 import org.springframework.beans.BeansException;

@@ -32,5 +32,5 @@
     base-package:指定扫描的基础包，spring在启动的时候会将基础包及子包下所有加了注解的类都自动
                 扫描进IOC容器
     -->
-    <context:component-scan base-package="com.allen.springIoc"></context:component-scan>
+    <context:component-scan base-package="com.allen.springIOC"></context:component-scan>
 </beans>
