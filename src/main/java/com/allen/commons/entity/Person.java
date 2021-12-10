@@ -1,15 +1,15 @@
 package com.allen.commons.entity;
 
 public class Person {
-    private String personid;
-    private String name;
-    private String address;
-    private String tel;
-    private String email;
-    private String job;
-    private String company;
-    private String message;
-    private Integer code;
+    public String personid;
+    public String name;
+    public String address;
+    public String tel;
+    public String email;
+    public String job;
+    public String company;
+    public String message;
+    public Integer code;
 
 
     @Override
