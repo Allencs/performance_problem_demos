@@ -52,10 +52,15 @@
         <appender-ref ref="FILE"/>
     </appender>
 
+    // additivity参数为true后日志内容会另外传给root日志再打印一遍（打印两遍）
+    <logger name="com.allen.testMyBatis" level="debug" additivity="false">
+        <appender-ref ref="STDOUT"/>
+    </logger>
+
     <!-- 日志输出级别 -->
     <root level="INFO">
         <appender-ref ref="STDOUT" />
-        <appender-ref ref="FILE" />
+<!--        <appender-ref ref="FILE" />-->
 <!--        <appender-ref ref="STDOUT_ASYNC" />-->
 <!--        <appender-ref ref="FILE_ASYNC" />-->
     </root>
