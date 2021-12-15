@@ -27,11 +27,25 @@
       <artifactId>log4j-core</artifactId>
       <version>2.12.1</version>
     </dependency>
+<!--    <dependency>-->
+<!--      <groupId>org.apache.logging.log4j</groupId>-->
+<!--      <artifactId>log4j-core</artifactId>-->
+<!--      <version>2.16.0</version>-->
+<!--      <scope>system</scope>-->
+<!--      <systemPath>/Users/chensheng/.m2/repository/log4j_jar/log4j-core-2.16.0.jar</systemPath>-->
+<!--    </dependency>-->
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-api</artifactId>
       <version>2.12.1</version>
     </dependency>
+<!--    <dependency>-->
+<!--      <groupId>org.apache.logging.log4j</groupId>-->
+<!--      <artifactId>log4j-api</artifactId>-->
+<!--      <version>2.16.0</version>-->
+<!--      <scope>system</scope>-->
+<!--      <systemPath>/Users/chensheng/.m2/repository/log4j_jar/log4j-api-2.16.0.jar</systemPath>-->
+<!--    </dependency>-->
     <!-- disruptor异步框架 -->
     <dependency>
       <groupId>com.lmax</groupId>

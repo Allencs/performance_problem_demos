@@ -40,7 +40,7 @@ public class TestMyBatis {
 
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        Deque<Callable<List<Vehicle>>> arrayDeque = new ArrayDeque<>(10);
+        Deque<Callable<List<Vehicle>>> arrayDeque = new ArrayDeque<>(20);
         TestMyBatis testMyBatis = new TestMyBatis();
         CountDownLatch countDownLatch = new CountDownLatch(10);
         for (int i = 0; i < 10; i++) {

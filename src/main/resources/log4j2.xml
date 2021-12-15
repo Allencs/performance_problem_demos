@@ -144,6 +144,7 @@
         开启全异步模式】（测试下来好像这种mix模式和使用Asyncroot线程栈看上去没啥区别？？？）-->
         <asyncRoot level="info" includeLocation="false">
             <appender-ref ref="RandomAccessFile"/>
+            <appender-ref ref="Console"/>
         </asyncRoot>
 
         <!--root 节点用来指定项目的根日志，level:日志输出级别，共有8个级别，按照从低到高为：All < Trace < Debug < Info < Warn < Error < Fatal < OFF.-->
