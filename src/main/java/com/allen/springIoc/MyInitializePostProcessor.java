@@ -1,4 +1,4 @@
-package com.allen.springIoc;
+package com.allen.springIOC;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;

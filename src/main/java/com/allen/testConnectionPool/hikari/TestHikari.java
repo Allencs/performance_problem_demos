@@ -29,7 +29,7 @@ public class TestHikari {
 //        dataSource = new HikariDataSource(config);
 
 //        // 也可以这样写
-        config.setDriverClassName("com.mysql.jdbc.Driver");
+        config.setDriverClassName("com.mysql.cj.jdbc.Driver");
         config.setJdbcUrl("jdbc:mysql://127.0.0.1:3306/master_vehicle?useUnicode=true&characterEncoding=utf8&useSSL=false");
         config.setUsername("root");
         config.setPassword("123456");

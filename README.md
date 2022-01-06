@@ -42,6 +42,29 @@ java队列demo【ArrayBlockingQueue】
 ## singleInstance
 单例设计模式（使用静态内部类实现）
 
-## springIoc
+## springAop
+Spring Aop简单demo
 
+## springIoc
+Spring IOC简单demo
+
+## testCompressFile
+1. 测试zip文件压缩
+2. I/O优化
+   > NIO Channel、InputStream和BufferInputStream、ByteBuffer.allocateDirect
+
+## testConnectionPool
+1. druid demo
+2. hikari demo
+
+## testDynamicProxy
+1. CGLIB
+2. JDK动态代理
+
+## testHttpComponents
+1. Apache HttpClient4 demo
+2. OkHttp3 demo
+
+## testJedis
+1. JedisClusterDemo redis在
 
