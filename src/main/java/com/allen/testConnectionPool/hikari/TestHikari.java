@@ -36,8 +36,8 @@ public class TestHikari {
         config.addDataSourceProperty("cachePrepStmts", "true");
         config.addDataSourceProperty("prepStmtCacheSize", "250");
         config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
-        config.setMaximumPoolSize(5);
-        config.setMinimumIdle(5);
+        config.setMaximumPoolSize(10);
+        config.setMinimumIdle(10);
         config.setConnectionTimeout(90000);
         dataSource = new HikariDataSource(config);
     }
@@ -61,47 +61,14 @@ public class TestHikari {
                 Statement statement = null;
                 try {
                     conn = hPool.getConnection();
-                    PreparedStatement preparedStatement = conn.prepareStatement("select *");
+                    PreparedStatement preparedStatement = conn.prepareStatement("select * from master_vehicle.vehicle limit 5");
                     System.out.println(Thread.currentThread().getName() + ": 获取数据库连接成功。");
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
-                }
-
-                try {
-                    statement = conn.createStatement();
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
-                }
-                ResultSet rs = null;
-                try {
-                    rs = statement.executeQuery("select * from scenario_info");
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
-                }
-                while (true) {
-                    try {
-                        if (!rs.next()) break;
-                    } catch (SQLException throwables) {
-                        throwables.printStackTrace();
-                    }
-                }
-                System.out.println(Thread.currentThread().getName() + "：结果集遍历完成。");
-//                try {
-//                    Thread.sleep(120000);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//                hPool.dataSource.close();
-//                System.out.println(Thread.currentThread().getName() +  "：hPool.dataSource.close()");
-                //关闭connection
-                try {
+                    preparedStatement.executeQuery();
                     conn.close();
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 }
-
                 try {
-                    System.out.println(Thread.currentThread().getName() + "：开始睡眠。");
                     Thread.sleep(120000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
