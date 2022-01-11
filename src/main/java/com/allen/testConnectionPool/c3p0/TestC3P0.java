@@ -1,8 +1,11 @@
 package com.allen.testConnectionPool.c3p0;
 
+import com.allen.testConnectionPool.dbcp.TestDBCP;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class TestC3P0 {
@@ -25,12 +28,26 @@ public class TestC3P0 {
 
     public static void main(String[] args) throws SQLException {
         TestC3P0 testC3P0 = new TestC3P0();
-        Connection connection = testC3P0.dataSource.getConnection();
-        System.out.println(connection);
-        try {
-            Thread.sleep(180000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        for (int i = 0; i < 50; i++) {
+            new Thread(() -> {
+                Connection connection = null;
+                try {
+                    connection = testC3P0.dataSource.getConnection();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                PreparedStatement preparedStatement = null;
+                try {
+                    preparedStatement = connection.prepareStatement("select * from master_vehicle.vehicle limit 5");
+                    ResultSet resultSet = preparedStatement.executeQuery();
+                    resultSet.next();
+                    System.out.println(resultSet.getString("vin"));
+                    Thread.sleep(120000);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }).start();
         }
     }
 

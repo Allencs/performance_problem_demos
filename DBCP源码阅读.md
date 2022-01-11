@@ -9,6 +9,24 @@
 
 首先在`create()`方法中，会判断连接池数量有没有超过maxTotal限制，如果没有超过，则准许新建连接，并返回PooledObject对象，否则返回null；
 - 可以结合`createCount`和`idleObjects`，来判断连接池是否用完。如果`createCount`=`MaxTotal`，且`idleObjects`的`size`为`0`，则连接池已耗尽。
+- 在`create()`方法中，会使用到`GenericObjectPool`的`allObjects`成员变量，保存了所有已创建的连接对象。如果`allObjects`的`size` = `MaxTotal`，且`idleObjects`的`size`为`0`，则连接池已耗尽。
+> **注：**  
+> 1. `ConcurrentHashMap`中table数组的数量不一定等于`baseCount`大小「哈希表所有节点的个数总和」，因为可能存在`hash`冲突，同一数组下标位置可能存在多个Node组成的链表。
+> 2. `GenericObjectPool`中连接池的创建和扩容都是单线程，因此底层保存连接池的`ConcurrentHashMap`中`counterCells`为`null`，即`baseCount`即为Map保存的数据量。
+> 
+
+```org.apache.commons.pool2.impl.GenericObjectPool.allObjects
+/*
+     * All of the objects currently associated with this pool in any state. It
+     * excludes objects that have been destroyed. The size of
+     * {@link #allObjects} will always be less than or equal to {@link
+     * #_maxActive}. Map keys are pooled objects, values are the PooledObject
+     * wrappers used internally by the pool.
+     */
+    private final Map<IdentityWrapper<T>, PooledObject<T>> allObjects =
+        new ConcurrentHashMap<>();
+```
+create()方法源码如下：
 ```org.apache.commons.pool2.impl.GenericObjectPool.create()
 /**
      * Attempts to create a new wrapped pooled object.
