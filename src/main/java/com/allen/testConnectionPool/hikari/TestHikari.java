@@ -36,7 +36,7 @@ public class TestHikari {
         config.addDataSourceProperty("cachePrepStmts", "true");
         config.addDataSourceProperty("prepStmtCacheSize", "250");
         config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
-        config.setMaximumPoolSize(10);
+        config.setMaximumPoolSize(30);
         config.setMinimumIdle(10);
         config.setConnectionTimeout(90000);
         dataSource = new HikariDataSource(config);
@@ -55,23 +55,21 @@ public class TestHikari {
 
     public static void main(String[] args) throws IOException, SQLException, InterruptedException {
         TestHikari hPool = new TestHikari();
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 50; i++) {
             new Thread(() -> {
                 Connection conn = null;
                 Statement statement = null;
                 try {
                     conn = hPool.getConnection();
                     PreparedStatement preparedStatement = conn.prepareStatement("select * from master_vehicle.vehicle limit 5");
-                    System.out.println(Thread.currentThread().getName() + ": 获取数据库连接成功。");
-                    preparedStatement.executeQuery();
-                    conn.close();
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
-                }
-                try {
+//                    System.out.println(Thread.currentThread().getName() + ": 获取数据库连接成功。");
+                    ResultSet resultSet = preparedStatement.executeQuery();
+                    resultSet.next();
+                    System.out.println(resultSet.getString("vin"));
                     Thread.sleep(120000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    conn.close();
+                } catch (Exception throwables) {
+                    throwables.printStackTrace();
                 }
 
             }).start();
