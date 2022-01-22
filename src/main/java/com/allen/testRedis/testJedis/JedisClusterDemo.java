@@ -1,4 +1,4 @@
-package com.allen.testJedis;
+package com.allen.testRedis.testJedis;
 
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.runner.Runner;

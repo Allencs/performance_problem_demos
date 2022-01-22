@@ -1,4 +1,4 @@
-package com.allen.testRedission;
+package com.allen.testRedis.testRedission;
 
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.State;

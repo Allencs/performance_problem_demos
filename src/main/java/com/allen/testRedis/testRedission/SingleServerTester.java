@@ -1,4 +1,4 @@
-package com.allen.testRedission;
+package com.allen.testRedis.testRedission;
 
 import org.redisson.Redisson;
 import org.redisson.api.RBucket;

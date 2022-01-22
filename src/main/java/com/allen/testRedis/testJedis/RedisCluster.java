@@ -1,4 +1,4 @@
-package com.allen.testJedis;
+package com.allen.testRedis.testJedis;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
