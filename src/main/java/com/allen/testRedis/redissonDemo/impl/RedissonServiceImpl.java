@@ -15,13 +15,13 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 
-public class RedisServiceImpl implements RedisService {
+public class RedissonServiceImpl implements RedisService {
 
-    private final static Logger log = LoggerFactory.getLogger(RedisServiceImpl.class);
+    private final static Logger log = LoggerFactory.getLogger(RedissonServiceImpl.class);
     private static RedissonClient redissonClient;
     private final static ConcurrentHashMap<String, Object> rBuckets = new ConcurrentHashMap<>();
 
-    public RedisServiceImpl() {
+    public RedissonServiceImpl() {
         try {
             Config config = Config.fromYAML(new File("src/main/resources/redis.yaml"));
             redissonClient = Redisson.create(config);

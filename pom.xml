@@ -70,6 +70,12 @@
       <artifactId>redisson</artifactId>
       <version>3.13.2</version>
     </dependency>
+    <!-- lettuce -->
+    <dependency>
+      <groupId>io.lettuce</groupId>
+      <artifactId>lettuce-core</artifactId>
+      <version>5.3.7.RELEASE</version>
+    </dependency>
     <!-- xstream -->
     <dependency>
       <groupId>com.thoughtworks.xstream</groupId>

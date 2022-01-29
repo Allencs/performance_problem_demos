@@ -1,13 +1,13 @@
 package com.allen.testRedis.redissonDemo;
 
-import com.allen.testRedis.redissonDemo.impl.RedisServiceImpl;
+import com.allen.testRedis.redissonDemo.impl.RedissonServiceImpl;
 
 public class TestDemo {
 
-    static RedisServiceImpl redisService;
+    static RedissonServiceImpl redisService;
 
     static {
-        redisService = new RedisServiceImpl();
+        redisService = new RedissonServiceImpl();
     }
 
     public static void main(String[] args) {
