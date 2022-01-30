@@ -37,8 +37,6 @@ private <K, V> ConnectionFuture<StatefulRedisConnection<K, V>> connectStandalone
             }
         });
 
-
-
 RedisClient.getConnectionBuilder，connectionBuilder基于netty创建和redis服务的物理连接
 
 StatefulRedisConnectionImpl初始化构造函数中创建 1、sync命令执行代理对象 2、async命令执行对象 3、reactive命令执行对象

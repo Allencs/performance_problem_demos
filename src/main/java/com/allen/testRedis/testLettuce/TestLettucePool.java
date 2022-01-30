@@ -1,23 +1,18 @@
 package com.allen.testRedis.testLettuce;
 
 import com.allen.testRedis.testLettuce.impl.LettucePoolServiceImpl;
-import com.allen.testRedis.testLettuce.impl.LettuceServiceImpl;
 
 /**
  * @author: allen
- * @date: 2022/1/29 3:58 PM
+ * @date: 2022/1/30 11:25 AM
  * @description:
  **/
-public class TestLettuce {
-
-    public static void main(String[] args) throws InterruptedException {
-        LettuceServiceImpl lettuceService = new LettuceServiceImpl();
-
-        System.out.println(lettuceService.get(Thread.currentThread().getName()));
-
+public class TestLettucePool {
+    public static void main(String[] args) {
+        LettucePoolServiceImpl lettucePoolService = new LettucePoolServiceImpl();
         for (int i = 0; i < 100; i++) {
             new Thread(() -> {
-                lettuceService.set(Thread.currentThread().getName(), "this is thread " + Thread.currentThread().getName());
+                lettucePoolService.set(Thread.currentThread().getName(), "this is thread " + Thread.currentThread().getName());
                 System.out.println(Thread.currentThread().getName() + " finished setting value");
                 try {
                     Thread.sleep(1000);
@@ -27,6 +22,5 @@ public class TestLettuce {
             }).start();
 
         }
-
     }
 }
