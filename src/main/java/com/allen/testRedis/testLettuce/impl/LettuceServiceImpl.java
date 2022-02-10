@@ -29,6 +29,7 @@ public class LettuceServiceImpl implements RedisService {
 
     @Override
     public void set(String key, String value) {
+        // 返回的commands是一个代理对象
         RedisCommands<String, String> commands = connection.sync();
         commands.set(key, value);
     }
