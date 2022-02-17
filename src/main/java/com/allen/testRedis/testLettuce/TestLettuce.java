@@ -20,7 +20,7 @@ public class TestLettuce {
                 lettuceService.set(Thread.currentThread().getName(), "this is thread " + Thread.currentThread().getName());
                 System.out.println(Thread.currentThread().getName() + " finished setting value");
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(120000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

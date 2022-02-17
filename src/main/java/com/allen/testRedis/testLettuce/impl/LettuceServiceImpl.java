@@ -4,6 +4,7 @@ import com.allen.testRedis.RedisService;
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.RedisURI;
 import io.lettuce.core.api.StatefulRedisConnection;
+import io.lettuce.core.api.async.RedisAsyncCommands;
 import io.lettuce.core.api.sync.RedisCommands;
 import io.lettuce.core.resource.ClientResources;
 import io.lettuce.core.resource.DefaultClientResources;
@@ -31,6 +32,9 @@ public class LettuceServiceImpl implements RedisService {
     public void set(String key, String value) {
         // 返回的commands是一个代理对象
         RedisCommands<String, String> commands = connection.sync();
+
+//        RedisAsyncCommands<String, String> commands = connection.async();
+
         commands.set(key, value);
     }
 

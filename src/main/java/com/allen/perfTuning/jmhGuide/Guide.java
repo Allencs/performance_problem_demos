@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+@State(Scope.Benchmark)
 public class Guide {
     double x;
     List<String> list = new LinkedList<>();
