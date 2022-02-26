@@ -29,6 +29,9 @@ public class TestListAndHashSet {
     public static final HashSet<String> hashSet = new HashSet<String>();
     public static final ArrayList<String> arrayList = new ArrayList<String>();
 
+    /**
+     * 构建测试集合HashSet和ArrayList，都存放10001个元素，并将待判断元素添加至尾部
+     */
     @Setup(Level.Trial)
     public void init() {
         for (int i = 0; i < 10000; i++) {
