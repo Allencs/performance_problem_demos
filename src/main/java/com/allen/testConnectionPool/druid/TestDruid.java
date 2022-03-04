@@ -50,6 +50,8 @@ public class TestDruid {
             log.info(Thread.currentThread().getName() + " | UseUnfairLock: " + dataSource.isUseUnfairLock());
         }).start();
 
+        //获取连接
+        Connection connection2 = dataSource.getConnection();
 //        Thread.sleep(1200000);
 
         //关闭连接

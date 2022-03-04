@@ -11,14 +11,27 @@
 
 ```java
 /**
- * 
+ * druid 1.1.23版本之前的源码实现
+ * 如果配置了自定义Filter，这边class_connectionImpl就是null
+ */
+public static long getLastPacketReceivedTimeMs(Connection conn) throws SQLException {
+        if (class_connectionImpl == null && !class_connectionImpl_Error) {
+        try {
+            // 写死mysql-connector-java 5的类
+            // 因此使用6+版本的驱动，会存在ClassNotFound的问题。
+            class_connectionImpl = Utils.loadClass("com.mysql.jdbc.MySQLConnection");
+        } catch (Throwable error){
+        class_connectionImpl_Error = true;
+        }
+        }
+}
+
+/**
+ * druid 1.1.23版本及之后的源码实现
  * @param conn ：如果配置了自定义Filter，传入的conn就是ConnectionProxyImpl类型，否则就是ConnectionImpl类型
  */
 public static long getLastPacketReceivedTimeMs(Connection conn) throws SQLException {
-        // 现阶段知道如果配置了自定义Filter，这边class_connectionImpl就是null
-        // 判断条件成立后，就会进行类加载，而Druid <= 1.1.22的版本是写死mysql-connector-java 5的，因此使用6+版本的驱动，会存在ClassNotFound的问题。
-        // 而在一般的Spring框架下，会使用TomcatEmbeddedWebappClassLoader类加载器进行加载，首先会查找缓存，但是缓存里永远都没有，因此会不断的进行类加载操作。
-        // 类加载的报错在loadClass方法内部catch之后未做任何操作
+        // 如果配置了自定义Filter，这边class_connectionImpl就是null
         if (class_connectionImpl == null && !class_connectionImpl_Error) {
             try {
                 // 加载mysql连接类
@@ -31,49 +44,6 @@ public static long getLastPacketReceivedTimeMs(Connection conn) throws SQLExcept
                 }
             } catch (Throwable error) {
                 class_connectionImpl_Error = true;
-            }
-        }
-
-        if (class_connectionImpl == null) {
-            return -1;
-        }
-
-        if(mysqlJdbcVersion6){
-            if (classJdbc == null) {
-                // 加载mysql连接扩展类
-                classJdbc = Utils.loadClass("com.mysql.cj.jdbc.JdbcConnection");
-            }
-
-            if (classJdbc == null) {
-                return -1;
-            }
-
-            if (getIdleFor == null && !getIdleForError) {
-                try {
-                    // 通过反射获取getIdleFor方法。实际上调用的是ConnectionImpl对象的getIdleFor方法。
-                    getIdleFor = classJdbc.getMethod("getIdleFor");
-                    getIdleFor.setAccessible(true);
-                } catch (Throwable error) {
-                    getIdleForError = true;
-                }
-            }
-
-            if (getIdleFor == null) {
-                return -1;
-            }
-
-            try {
-                Object connImpl = conn.unwrap(class_connectionImpl);
-                if (connImpl == null) {
-                    return -1;
-                }
-
-                return System.currentTimeMillis()
-                        - ((Long)
-                            getIdleFor.invoke(connImpl))
-                        .longValue();
-            } catch (Exception e) {
-                throw new SQLException("getIdleFor error", e);
             }
         }
         .....
@@ -96,3 +66,84 @@ public class TomcatEmbeddedWebappClassLoader extends ParallelWebappClassLoader {
  }
 }
 ```
+
+### 关于代理连接对象的创建
+如果配置了druid的`Filter`，就会创建代理连接对象`ConnectionProxyImpl`。
+
+核心调用逻辑如下（⚠️初始化连接创建的时候进行）：
+1. com.alibaba.druid.pool.DruidDataSource#getConnection()
+
+2. com.alibaba.druid.pool.DruidDataSource#getConnection(long)
+
+3. com.alibaba.druid.pool.DruidDataSource#init
+
+4. com.alibaba.druid.pool.DruidAbstractDataSource#createPhysicalConnection()
+
+5. com.alibaba.druid.pool.DruidAbstractDataSource#createPhysicalConnection(java.lang.String, java.util.Properties)
+```java
+// 如果添加了过滤器，就会调用FilterChainImpl的connection_connect方法
+public Connection createPhysicalConnection(String url, Properties info) throws SQLException {
+Connection conn;
+if (getProxyFilters().size() == 0) {
+conn = getDriver().connect(url, info);
+} else {
+conn = new FilterChainImpl(this).connection_connect(info);
+}
+
+        createCountUpdater.incrementAndGet(this);
+
+        return conn;
+    }
+```
+
+6. com.alibaba.druid.filter.FilterChainImpl#connection_connect
+```java
+public ConnectionProxy connection_connect(Properties info) throws SQLException {
+        if (this.pos < filterSize) {
+            return nextFilter()
+                    .connection_connect(this, info);
+        }
+
+        Driver driver = dataSource.getRawDriver();
+        String url = dataSource.getRawJdbcUrl();
+
+        Connection nativeConnection = driver.connect(url, info);
+
+        if (nativeConnection == null) {
+            return null;
+        }
+
+        return new ConnectionProxyImpl(dataSource, nativeConnection, info, dataSource.createConnectionId());
+    }
+```
+
+7. com.alibaba.druid.proxy.jdbc.ConnectionProxyImpl#ConnectionProxyImpl
+```java
+public ConnectionProxyImpl(DataSourceProxy dataSource, Connection connection, Properties properties, long id){
+        // 将物理连接对象ConnectionImpl传给ConnectionProxyImpl的connection属性
+        super(connection, id);
+        this.dataSource = dataSource;
+        this.connection = connection;
+        this.properties = properties;
+        this.connectedTime = System.currentTimeMillis();
+    }
+```
+
+```java
+public abstract class WrapperProxyImpl implements WrapperProxy {
+
+    private final Wrapper raw;
+
+    private final long id;
+
+    private Map<String, Object> attributes; // 不需要线程安全
+    // 父类WrapperProxyImpl的构造方法
+    // 将物理连接对象ConnectionImpl传给WrapperProxyImpl的ram属性,将connectionId传给id属性
+    public WrapperProxyImpl(Wrapper wrapper, long id) {
+        this.raw = wrapper;
+        this.id = id;
+    }
+}
+```
+
+后面`getConnection`获取的连接对象就都是`ConnectionProxyImpl`类型对象。
