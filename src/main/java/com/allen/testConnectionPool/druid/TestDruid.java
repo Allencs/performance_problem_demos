@@ -18,11 +18,11 @@ public class TestDruid {
     static {
         //数据源配置
         dataSource = new DruidDataSource();
-        dataSource.setUrl("jdbc:mysql://127.0.0.1/master_vehicle?serverTimezone=UTC");
+        dataSource.setUrl("jdbc:mysql://127.0.0.1:3306/master_vehicle");
         dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver"); //这个可以缺省的，会根据url自动识别
         dataSource.setUsername("root");
         dataSource.setPassword("123456");
-//        dataSource.setProxyFilters(MyLogFilter.getFilter()); // 添加自定义过滤器
+        dataSource.setProxyFilters(MyLogFilter.getFilter()); // 添加自定义过滤器
 
         //下面都是可选的配置
         dataSource.setInitialSize(10);  //初始连接数，默认0
@@ -32,8 +32,8 @@ public class TestDruid {
         dataSource.setPoolPreparedStatements(true); //缓存PreparedStatement，默认false
         dataSource.setMaxOpenPreparedStatements(20); //缓存PreparedStatement的最大数量，默认-1（不缓存）。大于0时会自动开启缓存PreparedStatement，所以可以省略上一句代码
         dataSource.setUseUnfairLock(true);
-//        dataSource.setTestOnBorrow(true);
-//        dataSource.setTestOnReturn(true);
+        dataSource.setTestOnBorrow(true);
+        dataSource.setTestOnReturn(true);
     }
 
     public static void main(String[] args) throws SQLException, InterruptedException {

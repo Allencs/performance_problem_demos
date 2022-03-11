@@ -15,6 +15,36 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.*;
 
+/**
+ * 验证下来结果是，流式查询平均耗时是最短的；
+ * fetchSize次之【MySQL fetchSize不生效问题？】，最差的是普通查询；
+ *
+ * 2022-03-11 18:36:58 [pool-1-thread-1] DEBUG com.allen.testMyBatis.VehicleMapper.selectVehicle - ==>  Preparing: select * from vehicle where id <= ?;
+ * 2022-03-11 18:36:58 [pool-1-thread-1] DEBUG com.allen.testMyBatis.VehicleMapper.selectVehicle - ==> Parameters: 10029(Integer)
+ * 2022-03-11 18:36:58 [pool-1-thread-1] DEBUG com.allen.testMyBatis.VehicleMapper.selectVehicle - <==      Total: 10029
+ * 2022-03-11 18:36:58 [pool-1-thread-1] INFO  com.allen.testMyBatis.TestMyBatis - selectVehicle --> 耗时： 198
+ * 2022-03-11 18:36:58 [pool-1-thread-2] DEBUG com.allen.testMyBatis.VehicleMapper.selectVehicle - ==>  Preparing: select * from vehicle where id <= ?;
+ * 2022-03-11 18:36:58 [pool-1-thread-2] DEBUG com.allen.testMyBatis.VehicleMapper.selectVehicle - ==> Parameters: 10052(Integer)
+ * 2022-03-11 18:36:58 [pool-1-thread-2] DEBUG com.allen.testMyBatis.VehicleMapper.selectVehicle - <==      Total: 10052
+ * 2022-03-11 18:36:58 [pool-1-thread-2] INFO  com.allen.testMyBatis.TestMyBatis - selectVehicle --> 耗时： 129
+ * 2022-03-11 18:36:58 [pool-1-thread-3] DEBUG com.allen.testMyBatis.VehicleMapper.selectVehicleWithFlow - ==>  Preparing: select * from vehicle where id <= ?;
+ * 2022-03-11 18:36:58 [pool-1-thread-3] DEBUG com.allen.testMyBatis.VehicleMapper.selectVehicleWithFlow - ==> Parameters: 10073(Integer)
+ * 2022-03-11 18:36:59 [pool-1-thread-3] DEBUG com.allen.testMyBatis.VehicleMapper.selectVehicleWithFlow - <==      Total: 10073
+ * 2022-03-11 18:36:59 [pool-1-thread-3] INFO  com.allen.testMyBatis.TestMyBatis - selectVehicleWithFlow --> 耗时： 95
+ * 2022-03-11 18:36:59 [pool-1-thread-4] DEBUG com.allen.testMyBatis.VehicleMapper.selectVehicleWithFlow - ==>  Preparing: select * from vehicle where id <= ?;
+ * 2022-03-11 18:36:59 [pool-1-thread-4] DEBUG com.allen.testMyBatis.VehicleMapper.selectVehicleWithFlow - ==> Parameters: 10082(Integer)
+ * 2022-03-11 18:36:59 [pool-1-thread-4] DEBUG com.allen.testMyBatis.VehicleMapper.selectVehicleWithFlow - <==      Total: 10082
+ * 2022-03-11 18:36:59 [pool-1-thread-4] INFO  com.allen.testMyBatis.TestMyBatis - selectVehicleWithFlow --> 耗时： 87
+ * 2022-03-11 18:36:59 [pool-1-thread-5] DEBUG com.allen.testMyBatis.VehicleMapper.selectVehicleWithFetchSize - ==>  Preparing: select * from vehicle where id <= ?;
+ * 2022-03-11 18:36:59 [pool-1-thread-5] DEBUG com.allen.testMyBatis.VehicleMapper.selectVehicleWithFetchSize - ==> Parameters: 10019(Integer)
+ * 2022-03-11 18:36:59 [pool-1-thread-5] DEBUG com.allen.testMyBatis.VehicleMapper.selectVehicleWithFetchSize - <==      Total: 10019
+ * 2022-03-11 18:36:59 [pool-1-thread-5] INFO  com.allen.testMyBatis.TestMyBatis - selectVehicleWithFetchSize --> 耗时： 90
+ * 2022-03-11 18:36:59 [pool-1-thread-6] DEBUG com.allen.testMyBatis.VehicleMapper.selectVehicleWithFetchSize - ==>  Preparing: select * from vehicle where id <= ?;
+ * 2022-03-11 18:36:59 [pool-1-thread-6] DEBUG com.allen.testMyBatis.VehicleMapper.selectVehicleWithFetchSize - ==> Parameters: 10021(Integer)
+ * 2022-03-11 18:36:59 [pool-1-thread-6] DEBUG com.allen.testMyBatis.VehicleMapper.selectVehicleWithFetchSize - <==      Total: 10021
+ * 2022-03-11 18:36:59 [pool-1-thread-6] INFO  com.allen.testMyBatis.TestMyBatis - selectVehicleWithFetchSize --> 耗时： 115
+ */
+
 public class TestMyBatis {
 
     private SqlSession session;
@@ -38,6 +68,10 @@ public class TestMyBatis {
 
      }
 
+     public int getIndex(int range) {
+         Random random = new Random();
+         return  10000 + random.nextInt(range);
+     }
 
     public static void main(String[] args) throws IOException, InterruptedException {
         Deque<Callable<List<Vehicle>>> arrayDeque = new ArrayDeque<>(20);
@@ -62,8 +96,10 @@ public class TestMyBatis {
         }
 
         Callable<List<Vehicle>> selectVehicle = () -> {
+            // 设置随机查询范围，避免MySQL缓存造成影响
+            int index = testMyBatis.getIndex(100);
             long startTime=System.currentTimeMillis();
-            List<Vehicle> list = testMyBatis.session.selectList("selectVehicle", 10000);
+            List<Vehicle> list = testMyBatis.session.selectList("selectVehicle", index);
             logger.info("selectVehicle --> 耗时： " + (System.currentTimeMillis() - startTime));
             return list;
         };
@@ -71,8 +107,9 @@ public class TestMyBatis {
         arrayDeque.offer(selectVehicle);
 
         Callable<List<Vehicle>> selectVehicleWithFlow = () -> {
+            int index = testMyBatis.getIndex(100);
             long startTime=System.currentTimeMillis();
-            List<Vehicle> list = testMyBatis.session.selectList("selectVehicleWithFlow", 10000);
+            List<Vehicle> list = testMyBatis.session.selectList("selectVehicleWithFlow", index);
             logger.info("selectVehicleWithFlow --> 耗时： " + (System.currentTimeMillis() - startTime));
             return list;
         };
@@ -80,8 +117,9 @@ public class TestMyBatis {
         arrayDeque.offer(selectVehicleWithFlow);
 
         Callable<List<Vehicle>> selectVehicleWithFetchSize = () -> {
+            int index = testMyBatis.getIndex(100);
             long startTime=System.currentTimeMillis();
-            List<Vehicle> list = testMyBatis.session.selectList("selectVehicleWithFetchSize", 10000);
+            List<Vehicle> list = testMyBatis.session.selectList("selectVehicleWithFetchSize", index);
             logger.info("selectVehicleWithFetchSize --> 耗时： " + (System.currentTimeMillis() - startTime));
             return list;
         };
