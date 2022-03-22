@@ -24,23 +24,23 @@ public class XStreamUtils {
         private static final XStreamUtils INSTANCE = new XStreamUtils();
     }
 
-//    private static class SingletonXstream {
-//
-//        private static XStream xStream = null;
-//
-//        static {
-//
-//            if (xStream == null) {
-//                xStream = new XStream(new Xpp3Driver());
-//                XStream.setupDefaultSecurity(xStream);
-//            }
-//        }
-//    }
+    private static class SingletonXStream {
 
-//    public static XStream getInstance() {
-//
-//        return SingletonXstream.xStream;
-//    }
+        private static XStream xStream = null;
+
+        static {
+
+            if (xStream == null) {
+                xStream = new XStream(new Xpp3Driver());
+                XStream.setupDefaultSecurity(xStream);
+            }
+        }
+    }
+
+    public static XStream getInstance() {
+
+        return SingletonXStream.xStream;
+    }
 
     /**
      * 每种类型xstream可以分别进行new，然后存在map中

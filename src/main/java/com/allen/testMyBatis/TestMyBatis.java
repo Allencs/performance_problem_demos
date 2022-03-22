@@ -50,6 +50,7 @@ public class TestMyBatis {
     private SqlSession session;
     private final static Logger logger = LoggerFactory.getLogger(TestMyBatis.class);
     private final ThreadPoolExecutor executor;
+    private final Random random = new Random();
 
     public TestMyBatis() throws IOException {
         this.initialDataSource();
@@ -69,7 +70,6 @@ public class TestMyBatis {
      }
 
      public int getIndex(int range) {
-         Random random = new Random();
          return  10000 + random.nextInt(range);
      }
 

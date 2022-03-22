@@ -165,6 +165,7 @@ public final class RingBuffer<E> extends RingBufferFields<E> implements Cursored
 参考知乎问答 [Java NIO中，关于DirectBuffer，HeapBuffer的疑问？](https://www.zhihu.com/question/57374068/answer/153398427)
 `DirectBuffer`本身这个对象是在堆中，但是引用了一块非堆的native memory，这块内存实际上还是属于java进程的内存中，这个角度说的话，
 `DirectBuffer`是在用户内存中。
+
 - `DirectBuffer`的好处是减少了一次从jvm heap到native memory的copy操作（究其原因：堆内存在GC，对象地址可能会移动；除了CMS标记整理， 
 其他垃圾收集算法都会做复制移动整理）；
 - 这里还存在一个问题，如果设计操作系统底层的操作，**native memory的数据是否要copy到kernel buffer？？**。「个人感觉应该是这样」

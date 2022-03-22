@@ -12,8 +12,12 @@ public class TestRef {
             Method method = clazz.getMethod("defaultMethod");
             clazz.getMethods();
             Method method1 = clazz.getDeclaredMethod("defaultMethod");
-            method.invoke(refTest);
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+//            method.invoke(refTest);
+            for (int i = 0; i < 100000; i++) {
+                Thread.sleep(500);
+                method.invoke(refTest);
+            }
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | NoSuchMethodException | InterruptedException | InvocationTargetException e) {
             e.printStackTrace();
         }
 
