@@ -152,10 +152,11 @@
       <artifactId>mybatis</artifactId>
       <version>3.5.3</version>
     </dependency>
+    <!-- 5.0及以上版本只支持jdk11 -->
     <dependency>
       <groupId>com.zaxxer</groupId>
       <artifactId>HikariCP</artifactId>
-      <version>5.0.1</version>
+      <version>4.0.3</version>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
