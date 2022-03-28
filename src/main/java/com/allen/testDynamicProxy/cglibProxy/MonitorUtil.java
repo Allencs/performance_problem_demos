@@ -6,7 +6,7 @@ package com.allen.testDynamicProxy.cglibProxy;
  */
 public class MonitorUtil {
 
-    private static ThreadLocal<Long> tl = new ThreadLocal<>();
+    private static final ThreadLocal<Long> tl = new ThreadLocal<>();
 
     public static void start() {
         tl.set(System.currentTimeMillis());
