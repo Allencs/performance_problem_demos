@@ -31,6 +31,13 @@ public final class BeanCopyUtil {
         return target;
     }
 
+    /**
+     * 将List内元素挨个映射成目标对象实例的List
+     * @param sources List对象
+     * @param target 目标对象class
+     * @return 目标对象实例的List
+     * @throws Exception 任意异常
+     */
     public static <T> List<T> copyList(List<?> sources, Class<T> target) throws Exception {
         if (sources.isEmpty()) {
             return Collections.emptyList();
@@ -50,6 +57,12 @@ public final class BeanCopyUtil {
         return list;
     }
 
+    /**
+     * Map映射成Bean实例
+     * @param source Map对象
+     * @param target 目标 class
+     * @return 目标对象实例
+     */
     public static <T> T mapToBean(Map<?, ?> source, Class<T> target) {
         T bean = objenesisStdThreadLocal.get().newInstance(target);
         BeanMap beanMap = BeanMap.create(bean);
@@ -61,6 +74,12 @@ public final class BeanCopyUtil {
         return BeanMap.create(source);
     }
 
+    /**
+     * 单例模式生成各beanCopier
+     * @param source 源class
+     * @param target 目标class
+     * @return 对应的BeanCopier
+     */
     private static <S, T> BeanCopier getCacheBeanCopier(Class<S> source, Class<T> target) {
 //        ConcurrentHashMap<Class<?>, BeanCopier> copierConcurrentHashMap = cache.computeIfAbsent(source, aClass -> new ConcurrentHashMap<>(16));
 //        return copierConcurrentHashMap.computeIfAbsent(target, aClass -> BeanCopier.create(source, target, false));
@@ -74,6 +93,12 @@ public final class BeanCopyUtil {
         return beanCopier;
     }
 
+    /**
+     * 生成beanCopier缓存的key
+     * @param srcClazz 源class
+     * @param destClazz 目标class
+     * @return String类型key名称
+     */
     private static String genKey(Class<?> srcClazz, Class<?> destClazz) {
         return srcClazz.getName() + destClazz.getName();
     }

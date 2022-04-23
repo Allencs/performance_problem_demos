@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Agent-Class: com.allen.byteCodeEnhancement.instrument.agentmain.MyAgentMainAgent
+Created-By: allen
+Can-Redefine-Classes: true
+Can-Retransform-Classes: true

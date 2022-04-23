@@ -1,5 +1,18 @@
 ## druid连接状态源码【随笔】
 
+### Druid连接池热修改问题
+
+1. 增加maxActive && inited=false
+   重新设置connections数组大小，并创建新连接对象
+
+2. 减少maxActive && inited=false
+   ⁃	recycle的时候会超出connections边界，—》 “connection recycle failed” —〉 关闭物理连接 —》 进行discard
+
+   ⁃	连接检测的时候 将不正常的tcp连接关闭
+
+   ⁃	连接检测的时候会将超过timeBetweenEvictionRunsMillis的连接进行discard
+
+
 ### disable设置情况：
 1. com.alibaba.druid.pool.DruidPooledConnection#close 关闭连接时会设置【即执行完recycle方法之后】
 
