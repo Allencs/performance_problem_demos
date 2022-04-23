@@ -31,7 +31,7 @@ public static long getLastPacketReceivedTimeMs(Connection conn) throws SQLExcept
  * @param conn ：如果配置了自定义Filter，传入的conn就是ConnectionProxyImpl类型，否则就是ConnectionImpl类型
  */
 public static long getLastPacketReceivedTimeMs(Connection conn) throws SQLException {
-        // 如果配置了自定义Filter，这边class_connectionImpl就是null
+        // class_connectionImpl初始化值是null，如果一次成功加载，那么class_connectionImpl就会被重新赋值
         if (class_connectionImpl == null && !class_connectionImpl_Error) {
             try {
                 // 加载mysql连接类
