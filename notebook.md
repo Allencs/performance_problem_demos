@@ -1,7 +1,7 @@
 # Log4j2源码记录
 
 1. 等待策略（DisruptorUtil类）
-```
+```java
 static WaitStrategy createWaitStrategy(final String propertyName, final long timeoutMillis) {
         final String strategy = PropertiesUtil.getProperties().getStringProperty(propertyName, "TIMEOUT");
         LOGGER.trace("property {}={}", propertyName, strategy);
@@ -24,7 +24,7 @@ static WaitStrategy createWaitStrategy(final String propertyName, final long tim
 ```
 2. 配置 `AsyncLogger.SynchronizeEnqueueWhenQueueFull=false AsyncLoggerConfig.SynchronizeEnqueueWhenQueueFull=false` 
 主要影响代码（AsyncLoggerConfigDisruptor类）
-```
+```java
 private void enqueue(final LogEvent logEvent, final AsyncLoggerConfig asyncLoggerConfig) {
         if (synchronizeEnqueueWhenQueueFull()) {
             synchronized (queueFullEnqueueLock) {
@@ -45,7 +45,7 @@ private void enqueue(final LogEvent logEvent, final AsyncLoggerConfig asyncLogge
 # Disruptor源码
 
 1. Disruptor在初始化的时候创建指定大小的RingBuffer，RingBuffer初始化的时候会将保存核心数据的数组填充满【数据内容为自定义的Event对象】；
-```aidl
+```java
 abstract class RingBufferFields<E> extends RingBufferPad
 {
     private static final int BUFFER_PAD;
@@ -119,7 +119,7 @@ abstract class RingBufferFields<E> extends RingBufferPad
 
 3. Disruptor主要通过Sequence操作可读/可写区间；Sequence在处理的时候在左右分别设置7位padding long【缓存填充数据】保证独占缓存行解决伪共享问题；
 
-```aidl
+```java
 class LhsPadding
 {
     protected long p1, p2, p3, p4, p5, p6, p7;
@@ -136,7 +136,7 @@ class RhsPadding extends Value
 }
 ```
 同样的设计思想存在于RingBuffer：
-```aidl
+```java
 abstract class RingBufferPad
 {
     protected long p1, p2, p3, p4, p5, p6, p7;

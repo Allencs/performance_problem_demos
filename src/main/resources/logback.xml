@@ -26,7 +26,8 @@
             <!--日志文件保留天数-->
             <MaxHistory>30</MaxHistory>
         </rollingPolicy>
-
+        <!-- set immediateFlush to false for much higher logging throughput -->
+        <immediateFlush>true</immediateFlush>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
 <!--            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} [%L - %C - %M] - %msg%n</pattern>-->
@@ -50,6 +51,8 @@
         <queueSize>1024</queueSize>
         <neverBlock>true</neverBlock>
         <appender-ref ref="FILE"/>
+        <!-- set immediateFlush to false for much higher logging throughput -->
+        <immediateFlush>true</immediateFlush>
     </appender>
 
     <!-- additivity参数为true后日志内容会另外传给root日志再打印一遍（打印两遍）-->
@@ -59,8 +62,8 @@
 
     <!-- 日志输出级别 -->
     <root level="INFO">
-        <appender-ref ref="STDOUT" />
-<!--        <appender-ref ref="FILE" />-->
+<!--        <appender-ref ref="STDOUT" />-->
+        <appender-ref ref="FILE" />
 <!--        <appender-ref ref="STDOUT_ASYNC" />-->
 <!--        <appender-ref ref="FILE_ASYNC" />-->
     </root>

@@ -25,6 +25,8 @@ public class TestLog {
         for (int i = 0; i < this.executor.getCorePoolSize(); i++) {
             this.executor.execute(() -> {
                 while (true) {
+//                    IllegalArgumentException e = new IllegalArgumentException("非法参数");
+//                    logger.info("异常", e);
                     logger.info("测试日志.... + " + Thread.currentThread().getName());
                     try {
                         Thread.sleep(1000);
@@ -37,6 +39,7 @@ public class TestLog {
     }
 
     public static void main(String[] args) throws InterruptedException {
-        new TestLog().testLog();
+//        new TestLog().testLog();
+        logger.info("测试日志.... + "  + Thread.currentThread().getName());
     }
 }
