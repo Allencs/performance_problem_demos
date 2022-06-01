@@ -1,4 +1,5 @@
-## 每次new ObjectMapper()导致的类加载问题
+## Jackson
+### 每次new ObjectMapper()导致的类加载问题
 
 关键代码如下：
 
@@ -39,4 +40,18 @@ protected JsonDeserializer<Object> _createAndCacheValueDeserializer(Deserializat
             }
         }
     }
+```
+
+### ObjectMapper中的序列化器缓存
+
+#### 反序列化
+1. 每个`ObjectMapper`有一个反序列化上下文`_deserializationContext`，会持有一个基于LRU的`DeserializerCache`
+
+```java
+/**
+     * Blueprint context object; stored here to allow custom
+     * sub-classes. Contains references to objects needed for
+     * deserialization construction (cache, factory).
+     */
+    protected DefaultDeserializationContext _deserializationContext;
 ```
