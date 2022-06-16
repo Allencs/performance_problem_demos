@@ -2,6 +2,7 @@ package com.allen.testConnectionPool.druid;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.allen.testConnectionPool.druid.filters.MyLogFilter;
+import org.apache.ibatis.executor.BatchExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
