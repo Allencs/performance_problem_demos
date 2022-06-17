@@ -8,6 +8,11 @@ import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 
 import java.io.IOException;
 
+/**
+ * CloseableHttpClient线程安全 官方说明：
+ * <a href="https://hc.apache.org/httpcomponents-client-5.1.x/migration-guide/preparation.html">...</a>
+ *
+ */
 public class TestPoolingClient {
 
     static HttpGet httpGet = new HttpGet("https://www.perfma.com");
