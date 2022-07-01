@@ -8,6 +8,8 @@ public class Cool {
 
     private String code;
 
+    private long id;
+
     private String pp;
 
     private String cc;
@@ -67,7 +69,13 @@ public class Cool {
         this.cc = cc;
     }
 
+    public long getId() {
+        return id;
+    }
 
+    public void setId(long id) {
+        this.id = id;
+    }
 
 
 }
