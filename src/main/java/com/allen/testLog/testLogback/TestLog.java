@@ -21,25 +21,32 @@ public class TestLog {
                 new ThreadPoolExecutor.AbortPolicy());
     }
 
+    /**
+     * 多线程模拟日志打印容易阻塞在java.util.concurrent.ArrayBlockingQueue#remainingCapacity()【检测队列剩余容量】方法上
+     */
     public void testLog() {
         for (int i = 0; i < this.executor.getCorePoolSize(); i++) {
             this.executor.execute(() -> {
                 while (true) {
 //                    IllegalArgumentException e = new IllegalArgumentException("非法参数");
 //                    logger.info("异常", e);
-                    logger.info("测试日志.... + " + Thread.currentThread().getName());
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                    logger.info("测试日志.... + " );
+                    logger.warn("测试日志.... + " );
+                    logger.debug("测试日志.... + " );
+                    logger.trace("测试日志.... + ");
+//                    logger.info("测试日志.... + " + Thread.currentThread().getName());
+//                    try {
+//                        Thread.sleep(1000);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
                 }
             });
         }
     }
 
     public static void main(String[] args) throws InterruptedException {
-//        new TestLog().testLog();
-        logger.info("测试日志.... + "  + Thread.currentThread().getName());
+        new TestLog().testLog();
+//        logger.info("测试日志.... + "  + Thread.currentThread().getName());
     }
 }
