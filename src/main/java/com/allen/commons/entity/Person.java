@@ -11,6 +11,9 @@ public class Person {
     public String message;
     public Integer code;
 
+    static {
+        System.out.println("类初始化 --> 执行静态代码块");
+    }
 
     @Override
     public String toString() {
