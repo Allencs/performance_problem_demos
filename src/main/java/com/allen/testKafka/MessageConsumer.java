@@ -5,10 +5,14 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.StringDeserializer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @Author: allen
@@ -19,6 +23,7 @@ public class MessageConsumer {
 
     private final static String TOPIC_NAME = "perfcase";
     private final static String CONSUMER_GROUP_NAME = "testGroup";
+    private final static Logger logger = LoggerFactory.getLogger(MessageConsumer.class);
 
     public static void main(String[] args) {
         Properties props = new Properties();
@@ -26,7 +31,7 @@ public class MessageConsumer {
         // 消费分组名
         props.put(ConsumerConfig.GROUP_ID_CONFIG, CONSUMER_GROUP_NAME);
         // 是否自动提交offset，默认就是true
-        props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "true");
+        props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false");
         // 自动提交offset的间隔时间
         props.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, "1000");
         //props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false");
@@ -35,7 +40,7 @@ public class MessageConsumer {
         latest(默认) ：只消费自己启动之后发送到主题的消息
         earliest：第一次从头开始消费，以后按照消费offset记录继续消费，这个需要区别于consumer.seekToBeginning(每次都从头开始消费)
         */
-        //props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
       /*
       consumer给broker发送心跳的间隔时间，broker接收到心跳如果此时有rebalance发生会通过心跳响应将
       rebalance方案下发给consumer，这个时间可以稍微短一点
@@ -55,9 +60,28 @@ public class MessageConsumer {
         props.put(ConsumerConfig.MAX_POLL_INTERVAL_MS_CONFIG, 30 * 1000);
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
-        KafkaConsumer<String, String> consumer = new KafkaConsumer<String, String>(props);
+//        KafkaConsumer<String, String> consumer = new KafkaConsumer<>(props);
 
-        consumer.subscribe(Arrays.asList(TOPIC_NAME));
+        for (int i = 0; i < 2; i++) {
+            new Thread(() -> {
+                KafkaConsumer<String, String> consumer = new KafkaConsumer<>(props);
+                consumer.subscribe(Collections.singletonList(TOPIC_NAME));
+                while (true) {
+                    /*
+                     * poll() API 是拉取消息的长轮询
+                     */
+                    ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(1000));
+                    for (ConsumerRecord<String, String> record : records) {
+                        logger.info("线程：{} 收到消息：partition = {},offset = {}, key = {}, value = {}", Thread.currentThread().getName(),
+                                record.partition(), record.offset(), record.key(), record.value());
+                    }
+                    // 手动提交offset
+                    consumer.commitSync();
+                }
+            }).start();
+        }
+//        consumer.subscribe(Arrays.asList(TOPIC_NAME));
+
         // 消费指定分区
         //consumer.assign(Arrays.asList(new TopicPartition(TOPIC_NAME, 0)));
 
@@ -92,33 +116,31 @@ public class MessageConsumer {
             }
         }*/
 
-        while (true) {
-            /*
-             * poll() API 是拉取消息的长轮询
-             */
-            ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(1000));
-            for (ConsumerRecord<String, String> record : records) {
-                System.out.printf("收到消息：partition = %d,offset = %d, key = %s, value = %s%n", record.partition(),
-                        record.offset(), record.key(), record.value());
-            }
 
-            /*if (records.count() > 0) {
-                // 手动同步提交offset，当前线程会阻塞直到offset提交成功
-                // 一般使用同步提交，因为提交之后一般也没有什么逻辑代码了
-                consumer.commitSync();
-
-                // 手动异步提交offset，当前线程提交offset不会阻塞，可以继续处理后面的程序逻辑
-                consumer.commitAsync(new OffsetCommitCallback() {
-                    @Override
-                    public void onComplete(Map<TopicPartition, OffsetAndMetadata> offsets, Exception exception) {
-                        if (exception != null) {
-                            System.err.println("Commit failed for " + offsets);
-                            System.err.println("Commit failed exception: " + exception.getStackTrace());
-                        }
-                    }
-                });
-
-            }*/
-        }
+//        while (true) {
+//            // poll() API 是拉取消息的长轮询
+//            ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(1000));
+//            for (ConsumerRecord<String, String> record : records) {
+//                logger.info("收到消息：partition = {},offset = {}, key = {}, value = {}", record.partition(), record.offset(), record.key(), record.value());
+//            }
+//
+//            /**if (records.count() > 0) {
+//                // 手动同步提交offset，当前线程会阻塞直到offset提交成功
+//                // 一般使用同步提交，因为提交之后一般也没有什么逻辑代码了
+//                consumer.commitSync();
+//
+//                // 手动异步提交offset，当前线程提交offset不会阻塞，可以继续处理后面的程序逻辑
+//                consumer.commitAsync(new OffsetCommitCallback() {
+//                    @Override
+//                    public void onComplete(Map<TopicPartition, OffsetAndMetadata> offsets, Exception exception) {
+//                        if (exception != null) {
+//                            System.err.println("Commit failed for " + offsets);
+//                            System.err.println("Commit failed exception: " + exception.getStackTrace());
+//                        }
+//                    }
+//                });
+//
+//            }**/
+//        }
     }
 }
