@@ -14,3 +14,4 @@ rollings/
 *.log
 .DS_Store
 *.gz
+out/
