@@ -111,6 +111,16 @@
 <!--            <AppenderRef ref="RollingFileInfo"/>-->
 <!--            <AppenderRef ref="RollingFileError"/>-->
 <!--        </Async>-->
+
+        <!-- 1. 如果配置异步发送（syncSend="false"），kafka的buffer.memory很容易撑满（默认32M），继而线程被blocked；
+        超过max.block.ms（默认 1min）时间就抛异常。
+         -->
+        <!-- 配置kafka appender -->
+<!--        <Kafka name="Kafka" topic="perfcase" syncSend="false">-->
+<!--            <PatternLayout pattern="${LOG_PATTERN}"/>-->
+<!--            <Property name="bootstrap.servers">10.10.16.107:9092</Property>-->
+<!--            <Property name="max.block.ms">1000</Property>-->
+<!--        </Kafka>-->
     </appenders>
 
 
@@ -147,7 +157,8 @@
         开启全异步模式】（测试下来好像这种mix模式和使用Asyncroot线程栈看上去没啥区别？？？）-->
         <asyncRoot level="info" includeLocation="false">
             <appender-ref ref="RandomAccessFile"/>
-            <appender-ref ref="Console"/>
+<!--            <appender-ref ref="Console"/>-->
+<!--            <appender-ref ref="Kafka"/>-->
         </asyncRoot>
 
         <!--root 节点用来指定项目的根日志，level:日志输出级别，共有8个级别，按照从低到高为：All < Trace < Debug < Info < Warn < Error < Fatal < OFF.-->
