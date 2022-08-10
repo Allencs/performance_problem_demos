@@ -1,9 +1,10 @@
 package com.allen.testRedis.testJedis;
 
 import com.allen.commons.utils.UuidUtil;
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
-import redis.clients.jedis.JedisPoolConfig;
+import redis.clients.jedis.*;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @Author: allen
@@ -14,6 +15,8 @@ public class TestJedisPool {
 
     private final static JedisPool jedisPool;
 
+//    private final static JedisCluster jedisCluster;
+
     static {
         JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
         // edit by allen 2022.03.18
@@ -23,6 +26,10 @@ public class TestJedisPool {
         jedisPoolConfig.setTestOnReturn(false);
 
         jedisPool = new JedisPool(jedisPoolConfig, "10.10.220.15", 6379, 1000, "Perfma888.");
+
+        Set<HostAndPort> jedisClusterNodes = new HashSet<>();
+        jedisClusterNodes.add(new HostAndPort("10.10.220.15", 6379));
+//        jedisCluster = new JedisCluster(jedisClusterNodes, 6000, 3000,3, "Perfma888.", jedisPoolConfig);
     }
 
     public static void main(String[] args) {

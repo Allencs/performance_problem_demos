@@ -22,7 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class MessageConsumer {
 
     private final static String TOPIC_NAME = "perfcase";
-    private final static String CONSUMER_GROUP_NAME = "testGroup";
+    private final static String CONSUMER_GROUP_NAME = "perfCaseConsumerGroup-1";
     private final static Logger logger = LoggerFactory.getLogger(MessageConsumer.class);
 
     public static void main(String[] args) {
