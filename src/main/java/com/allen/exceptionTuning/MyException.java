@@ -27,9 +27,7 @@ public class MyException extends Exception {
             c();
         } catch (Exception e) {
             e.printStackTrace();
-//            throw new MyException(e.getMessage());
-//            throw e;
-            throw (MyException)e.fillInStackTrace();
+//            throw (MyException)e.fillInStackTrace();
         }
     }
 
