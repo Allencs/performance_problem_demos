@@ -4,6 +4,9 @@ package com.allen.testIntern;
  * @Author: allen
  * @Date: 2022/7/5 10:49
  * @Description:
+ * -XX:+PrintStringTableStatistics输出字符串常量池统计信息
+ * 使用-XX:StringTableSize可以设置StringTableSize，默认是60013，可以设置的最小值为 1009
+ *
  * 1、使用 new 创建时，检测常量池中是否存在对应String对象,如果不存在则在字符串常量池中创建一个对象，最后在堆中创建字符串对象。
  * 2、如果直接使用字面量，则先看常量池中是否有相等的字符串，如果有，则返回此字符串的引用，如果没有，则在常量池中创建
  *
