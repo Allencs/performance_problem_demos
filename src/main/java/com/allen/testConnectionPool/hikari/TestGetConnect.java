@@ -4,7 +4,6 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.concurrent.ExecutorService;
@@ -18,7 +17,6 @@ public class TestGetConnect {
 
     // 数据库连接
     private HikariDataSource dataSource;
-
 
     TestGetConnect() {
 
@@ -68,11 +66,12 @@ public class TestGetConnect {
         while (i < 1000) {
             executorService.submit(() -> {
                 try {
+                    long starTime = System.currentTimeMillis();
                     Connection conn = testGetConnect.getConnection();
-                    logger.info("线程：「{}」得到连接，开始查询...", Thread.currentThread().getName());
-                    Thread.sleep(3000);
-                    logger.info("线程：「{}」查询结束。", Thread.currentThread().getName());
+                    // 模拟SQL查询耗时
+                    Thread.sleep(1000);
                     conn.close();
+                    logger.info("线程：「{}」查询结束，耗时：{}", Thread.currentThread().getName(), (System.currentTimeMillis() - starTime));
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 } catch (InterruptedException e) {
