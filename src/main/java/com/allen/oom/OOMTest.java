@@ -16,10 +16,10 @@ public class OOMTest {
     private static Logger logger = LoggerFactory.getLogger(OOMTest.class);
 
     static List<Object> list = new ArrayList<>();
-    static ByteBuffer byteBuffer = ByteBuffer.allocateDirect(4096 * 1024);
 
-    public static void main(String[] args) throws Exception {
-        heapOom();
+    public static void main(String[] args) {
+//        heapOom();
+        directOom();
     }
 
     public static byte[] getBytesFromObject(Serializable obj) throws Exception {
@@ -32,7 +32,7 @@ public class OOMTest {
         return bo.toByteArray();
     }
 
-    private static void heapOom() throws Exception {
+    private static void heapOom() {
         /**
          *  Test heap memory oom
          *  -Xmx128m -XX:+UseG1GC -XX:-DoEscapeAnalysis -XX:+HeapDumpOnOutOfMemoryError -XX:NativeMemoryTracking=detail
@@ -45,7 +45,7 @@ public class OOMTest {
         }
     }
 
-    private static void directOom() throws Exception {
+    private static void directOom() {
         /**
          *  Test direct memory oom
          *  -XX:MaxDirectMemorySize
@@ -53,9 +53,17 @@ public class OOMTest {
         for(int i=0; i<10000000; i++){
             String d = new Date().toString();
             OOMBean oomBean = new OOMBean(d, i);
-            byte[] bytes = getBytesFromObject(oomBean);
-            byteBuffer.put(bytes);
-            logger.info("add bean:" + (i + 1));
+            byte[] bytes;
+            try {
+                bytes = getBytesFromObject(oomBean);
+                ByteBuffer byteBuffer = ByteBuffer.allocateDirect(100 * 1024);
+                // 将byteBuffer加入静态集合中，防止垃圾回收
+                list.add(byteBuffer);
+                byteBuffer.put(bytes);
+                logger.info("add bean:" + (i + 1));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

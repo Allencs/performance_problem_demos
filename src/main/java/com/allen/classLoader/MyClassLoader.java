@@ -28,7 +28,7 @@ public class MyClassLoader extends ClassLoader {
 
     }
 
-    protected Class<?> findClass(String name) throws ClassNotFoundException {
+    public Class<?> findClass(String name) throws ClassNotFoundException {
         try {
             byte[] data = loadByte(name);
             return defineClass(name, data, 0, data.length);

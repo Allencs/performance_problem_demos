@@ -15,3 +15,5 @@ rollings/
 .DS_Store
 *.gz
 out/
+*.bak
+*.hprof

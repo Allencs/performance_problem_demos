@@ -2,6 +2,9 @@ package com.allen.commons.entity;
 
 public class CommonTestEntity {
 
+    public String name;
+    private Integer age;
+
     static {
         System.out.println("CommonTestEntity执行类加载...");
     }
