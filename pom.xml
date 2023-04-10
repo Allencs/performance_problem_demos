@@ -231,6 +231,12 @@
       <artifactId>commons-lang3</artifactId>
       <version>3.12.0</version>
     </dependency>
+    <!-- ohc堆外缓存 -->
+    <dependency>
+      <groupId>org.caffinitas.ohc</groupId>
+      <artifactId>ohc-core</artifactId>
+      <version>0.7.4</version>
+    </dependency>
   </dependencies>
 
   <build>

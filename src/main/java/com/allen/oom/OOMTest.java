@@ -61,7 +61,7 @@ public class OOMTest {
                 list.add(byteBuffer);
                 byteBuffer.put(bytes);
 //                logger.info("add bean:" + (i + 1));
-            } catch (Exception e) {
+            } catch (Throwable e) {
                 e.printStackTrace();
             }
         }

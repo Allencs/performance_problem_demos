@@ -10,6 +10,19 @@
     1. 设置客户端资源对象（客户端各种参数配置）
     2. 在构建DefaultClientResources时创建底层netty客户端
 
+```
+ClientResources res = DefaultClientResources.builder()
+                        .ioThreadPoolSize(4)
+                        .computationThreadPoolSize(4)
+                        .build()
+```
+
+> DefaultClientResources实例化过程中会创建两个netty线程池，`lettuce-nioEventLoop-*-*`和`lettuce-eventExecutorLoop-*-*`。
+> `lettuce-nioEventLoop`是netty底层IO交互的线程池，官方叫线I/O Thread Pool Size，程池最小线程数2，默认线程数和逻辑CPU核数相同。
+> `lettuce-eventExecutorLoop-*-*`，是lettuce任务处理的线程池，官方叫Computation Thread Pool Size，
+> 默认线程池最小也是2，默认线程数和逻辑CPU核数相同。
+> 配置文件中可通过`io.netty.eventLoopThreads`配置上面两个线程池的大小。
+
 ### Connection
 
 #### 创建底层netty Channel，构建和redis服务的tcp连接
