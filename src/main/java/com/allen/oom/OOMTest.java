@@ -41,7 +41,7 @@ public class OOMTest {
             String d = new Date().toString();
             OOMBean oomBean = new OOMBean(d, i);
             list.add(oomBean);
-            logger.info("add bean:" + (i + 1));
+//            logger.info("add bean:" + (i + 1));
         }
     }
 
@@ -60,7 +60,7 @@ public class OOMTest {
                 // 将byteBuffer加入静态集合中，防止垃圾回收
                 list.add(byteBuffer);
                 byteBuffer.put(bytes);
-                logger.info("add bean:" + (i + 1));
+//                logger.info("add bean:" + (i + 1));
             } catch (Exception e) {
                 e.printStackTrace();
             }
