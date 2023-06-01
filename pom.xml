@@ -237,6 +237,12 @@
       <artifactId>ohc-core</artifactId>
       <version>0.7.4</version>
     </dependency>
+    <!-- 绑定固定cpu核 -->
+    <dependency>
+      <groupId>net.openhft</groupId>
+      <artifactId>affinity</artifactId>
+      <version>3.23.2</version>
+    </dependency>
   </dependencies>
 
   <build>
