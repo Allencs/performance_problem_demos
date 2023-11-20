@@ -2,8 +2,8 @@ package com.allen.byteCodeEnhancement.instrument.agentmain;
 
 import org.apache.ibatis.javassist.ClassPool;
 import org.apache.ibatis.javassist.CtClass;
+import org.apache.ibatis.javassist.CtField;
 import org.apache.ibatis.javassist.CtMethod;
-
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.security.ProtectionDomain;
@@ -21,9 +21,14 @@ public class AgentmainTransformer implements ClassFileTransformer {
         try {
             ClassPool cp = ClassPool.getDefault();
             CtClass cc = cp.get("com.allen.byteCodeEnhancement.Base");
+            // 添加新字段$jacocoData（会导致attach报错）
+//            CtField f1 = CtField.make("private static transient boolean[] $jacocoData;", cc);
+//            f1.setModifiers(8);
+//            cc.addField(f1);
             CtMethod m = cc.getDeclaredMethod("process");
             m.insertBefore("{ System.out.println(\"start...【enhance by javassist and instrument】\"); }");
             m.insertAfter("{ System.out.println(\"end【enhance by javassist and instrument】\"); }");
+            cc.writeFile();
             byteClass =  cc.toBytecode();
             // If a CtClass object is converted into a class file by writeFile(), toClass(), or toBytecode(),
             // Javassist freezes that CtClass object. Further modifications of that CtClass object are not permitted.

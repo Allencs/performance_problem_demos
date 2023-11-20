@@ -1,3 +1,5 @@
 Manifest-Version: 1.0
-Main-Class: com.allen.byteCodeEnhancement.instrument.TestMain
-
+Agent-Class: com.allen.byteCodeEnhancement.instrument.agentmain.MyAgentMainAgent
+Created-By: allen
+Can-Redefine-Classes: true
+Can-Retransform-Classes: true

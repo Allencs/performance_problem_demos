@@ -243,6 +243,15 @@
       <artifactId>affinity</artifactId>
       <version>3.23.2</version>
     </dependency>
+    <dependency>
+      <groupId>com.sun</groupId>
+      <artifactId>tools</artifactId>
+      <version>1.8.0</version>
+      <scope>system</scope>
+      <!--suppress UnresolvedMavenProperty -->
+      <systemPath>${env.JAVA_HOME}/lib/tools.jar</systemPath>
+    </dependency>
+
   </dependencies>
 
   <build>
