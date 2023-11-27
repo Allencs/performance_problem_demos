@@ -1,6 +1,6 @@
 package com.allen.cpuCacheLine;
-import com.allen.commons.entity.NewPerson;
-import com.allen.commons.utils.UuidUtil;
+import com.allen.models.NewPerson;
+import com.allen.utils.UuidUtil;
 import com.lmax.disruptor.util.Util;
 import sun.misc.Unsafe;
 

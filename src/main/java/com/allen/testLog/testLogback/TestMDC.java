@@ -1,6 +1,6 @@
 package com.allen.testLog.testLogback;
 
-import com.allen.commons.utils.UuidUtil;
+import com.allen.utils.UuidUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;

@@ -1,7 +1,7 @@
 package com.allen.springIOC;
 
-import com.allen.commons.entity.Person;
-import com.allen.commons.utils.UuidUtil;
+import com.allen.models.Person;
+import com.allen.utils.UuidUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

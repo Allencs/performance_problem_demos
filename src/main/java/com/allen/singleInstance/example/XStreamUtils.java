@@ -1,6 +1,6 @@
 package com.allen.singleInstance.example;
 
-import com.allen.commons.entity.Person;
+import com.allen.models.Person;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.Xpp3Driver;
 

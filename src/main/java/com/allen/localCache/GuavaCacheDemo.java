@@ -1,5 +1,6 @@
 package com.allen.localCache;
 
+import com.allen.models.User;
 import com.google.common.cache.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

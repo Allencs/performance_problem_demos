@@ -7,7 +7,7 @@ public class TestRef {
 
     public static void main(String[] args) {
         try {
-            Class<?> clazz = Class.forName("com.allen.commons.entity.CommonTestEntity");
+            Class<?> clazz = Class.forName("com.allen.entities.CommonTestEntity");
             Object refTest = clazz.newInstance();
             Method method = clazz.getMethod("defaultMethod");
             clazz.getMethods();

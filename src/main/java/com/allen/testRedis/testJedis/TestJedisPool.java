@@ -1,6 +1,6 @@
 package com.allen.testRedis.testJedis;
 
-import com.allen.commons.utils.UuidUtil;
+import com.allen.utils.UuidUtil;
 import redis.clients.jedis.*;
 
 import java.util.HashSet;

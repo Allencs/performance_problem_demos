@@ -1,5 +1,6 @@
 package com.allen.testMyBatis;
 
+import com.allen.models.Vehicle;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;

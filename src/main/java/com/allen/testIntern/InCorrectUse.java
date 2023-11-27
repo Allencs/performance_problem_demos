@@ -1,6 +1,6 @@
 package com.allen.testIntern;
 
-import com.allen.commons.utils.UuidUtil;
+import com.allen.utils.UuidUtil;
 
 import java.util.ArrayList;
 

@@ -1,6 +1,6 @@
 package com.allen.groovyComponents;
 
-import com.allen.commons.entity.Person;
+import com.allen.models.Person;
 import groovy.text.SimpleTemplateEngine;
 import groovy.text.Template;
 import org.slf4j.Logger;

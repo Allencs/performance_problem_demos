@@ -1,6 +1,6 @@
 package com.allen.springIOC;
 
-import com.allen.commons.entity.Person;
+import com.allen.models.Person;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;

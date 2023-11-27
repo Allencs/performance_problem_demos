@@ -1,7 +1,7 @@
 package com.allen.testKafka;
 
 import com.alibaba.fastjson.JSON;
-import com.allen.commons.utils.UuidUtil;
+import com.allen.utils.UuidUtil;
 import org.apache.kafka.clients.producer.*;
 import org.apache.kafka.common.serialization.StringSerializer;
 

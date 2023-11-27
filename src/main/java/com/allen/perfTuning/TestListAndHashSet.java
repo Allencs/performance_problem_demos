@@ -1,6 +1,6 @@
 package com.allen.perfTuning;
 
-import com.allen.commons.utils.UuidUtil;
+import com.allen.utils.UuidUtil;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.RunnerException;

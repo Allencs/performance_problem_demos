@@ -1,6 +1,6 @@
 package com.allen.springIOC;
 
-import com.allen.commons.entity.Person;
+import com.allen.models.Person;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
