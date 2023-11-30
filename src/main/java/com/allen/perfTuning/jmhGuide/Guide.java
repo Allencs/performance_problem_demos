@@ -6,6 +6,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * JMH参数说明可参考：https://juejin.cn/post/7292042053407473715
+ * @State：用于多线程的测试
+ * @State(Scope.Thread)：作用域为线程，可以理解为一个ThreadLocal变量
+ * @State(Scope.Benchmark)：作用域为本次JMH测试，线程共享；
+ * @State(Scope.Group)：
+ */
 @State(Scope.Benchmark)
 public class Guide {
     double x;
