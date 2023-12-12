@@ -1,0 +1,26 @@
+## 内存泄漏场景
+
+### 1. 版本较低，存在BUG
+相关版本号（待梳理）
+
+### 2. 编码问题
+Netty在处理网络数据时，在Read网络数据时由Netty创建Buffer，Write网络数据时Buffer往往是由业务方创建的。不管是读和写，Buffer用完后都必须进行释放，否则可能会造成内存泄露。
+在Write网络数据时，可以确保数据被写往网络了，Netty会自动进行Buffer的释放，因为Netty会在 pipeline中安装两个Handle:
+【相关类DefaultChannelPipeline】
+1. `TailContext`
+2. `HeadContext`
+
+![头尾Handle.jpg](materials%2F%E5%A4%B4%E5%B0%BEHandle.jpg)
+
+![头尾hadler类.png](materials%2F%E5%A4%B4%E5%B0%BEhadler%E7%B1%BB.png)
+
+**Handler的顺序：**
+- **网络 -> Head -> 自定义Handler -> Tail** 
+
+Head同时会处理出站和入站，_**在Head中会负责将出站的Buffer释放**_。 但是下面的两种情况就会出现问题：
+
+**_Write网络数据时_**，有outBoundHandler处理(重写/拦截)了write()操作并丢弃了数据， 没有继续往下写，就要由我们负责释放这个Buffer，必须调用ReferenceCountUtil.release方法，否则就可能会造成内存泄露。
+
+_**Read网络数据时**_，如果我们可以确保每个InboundHandler都把数据往后传递了，也就是调用了相关的`fireChannelRead`方法，Netty也会帮我们释放，这个是由Tail负责的。同样，如果有InboundHandler处理了数据，又不继续往后传递，又没有调用负责释放的ReferenceCountUtil.release方法，就可能会造成内存泄露。
+
+由于消费入站数据是一项常规任务，所以Netty提供了一个特殊的被称为 SimpleChannelInboundHandler的ChannelInboundHandler实现。这个实现会在数据 被channelRead0()方法消费之后自动释放数据。
