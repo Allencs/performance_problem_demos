@@ -1,5 +1,9 @@
 ## 内存泄漏场景
 
+默认堆外直接内存池类对象：`PooledUnsafeDirectByteBuf`
+
+![img.png](materials/netty/PooledUnsafeDirectByteBuf.png)
+
 ### 1. 版本较低，存在BUG
 相关版本号（待梳理）
 
@@ -33,7 +37,7 @@ _**Read网络数据时**_，如果我们可以确保每个InboundHandler都把�
 
 ### netty默认使用的直接内存
 
-#### netty每个work线程-nioEventLoop的threadlocal会保存直接内存的区域
+#### netty每个work线程-nioEventLoop都会通过PoolThreadLocalCache，绑定一块内存区域PoolArea，避免多线程下内存分配发生冲突，降低性能；
 ![img.png](materials/netty/netty-threadlocal直接内存段.png)
 
 #### release大致流程
@@ -41,5 +45,8 @@ PooledUnsafeDirectByteBuf回收流程
 io.netty.buffer.AbstractReferenceCountedByteBuf#release()
 io.netty.util.internal.ReferenceCountUpdater#release(T)
 io.netty.buffer.AbstractReferenceCountedByteBuf#handleRelease
-io.netty.buffer.PooledByteBuf#deallocate
+io.netty.buffer.PooledByteBuf#deallocate【如果开启了泄漏检测，在此将WeakReference的referent设置为null】
 io.netty.buffer.PooledByteBuf#recycle
+
+
+待研究：https://kkewwei.github.io/elasticsearch_learning/2018/07/20/Netty-PoolChunk%E5%8E%9F%E7%90%86%E6%8E%A2%E7%A9%B6/
