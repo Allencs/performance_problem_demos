@@ -1,3 +1,16 @@
+## netty默认direct memory分配流程
+![img.png](materials/netty/直接内存分配流程.png)
+
+最终会调用`io.netty.util.internal.PlatformDependent0`的`newDirectBuffer`方法进行分配
+![img.png](materials/netty/PlatformDependent0分配直接内存.png)
+
+`io.netty.util.internal.PlatformDependent0.newDirectBuffer`通过反射的方式，创建`java.nio.DirectByteBuffer(long,int)`
+![img.png](materials/netty/PlatformDependent0反射实例化.png)
+
+![img.png](materials/netty/DirectByteBuffer构造方法.png)
+
+直接绕过了常规JDK接口分配，因此常规的工具无法监控此类分配方法的direct memory占用。
+
 ## 内存泄漏场景
 
 默认堆外直接内存池类对象：`PooledUnsafeDirectByteBuf`
