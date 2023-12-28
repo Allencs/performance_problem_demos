@@ -54,12 +54,24 @@ _**Read网络数据时**_，如果我们可以确保每个InboundHandler都把�
 ![img.png](materials/netty/netty-threadlocal直接内存段.png)
 
 #### release大致流程
-PooledUnsafeDirectByteBuf回收流程
-io.netty.buffer.AbstractReferenceCountedByteBuf#release()
-io.netty.util.internal.ReferenceCountUpdater#release(T)
-io.netty.buffer.AbstractReferenceCountedByteBuf#handleRelease
-io.netty.buffer.PooledByteBuf#deallocate【如果开启了泄漏检测，在此将WeakReference的referent设置为null】
-io.netty.buffer.PooledByteBuf#recycle
+PooledUnsafeDirectByteBuf回收流程  
+io.netty.buffer.AbstractReferenceCountedByteBuf#release()  
+io.netty.util.internal.ReferenceCountUpdater#release(T)  
+io.netty.buffer.AbstractReferenceCountedByteBuf#handleRelease  
+io.netty.buffer.PooledByteBuf#deallocate【如果开启了泄漏检测，在此将WeakReference的referent设置为null】  
+io.netty.buffer.PooledByteBuf#recycle  
+
+#### 关于ByteBuf引用计数释放说明
+参见netty官方：https://netty.io/4.1/api/io/netty/util/ReferenceCounted.html
+
+> public interface ReferenceCounted
+> 
+> A reference-counted object that requires explicit deallocation.
+> When a new ReferenceCounted is instantiated, it starts with the reference count of 1. retain() increases the reference count, and release() decreases the reference count. If the reference count is decreased to 0, the object will be deallocated explicitly, and accessing the deallocated object will usually result in an access violation.
+
+If an object that implements ReferenceCounted is a container of other objects that implement ReferenceCounted, the contained objects will also be released via release() when the container's reference count becomes 0.
+
+
 
 
 待研究：https://kkewwei.github.io/elasticsearch_learning/2018/07/20/Netty-PoolChunk%E5%8E%9F%E7%90%86%E6%8E%A2%E7%A9%B6/
