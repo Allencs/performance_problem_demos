@@ -20,4 +20,8 @@ public class CommonTestEntity {
     public void showAge() {
         System.out.println("执行实例方法：showAge: " + this.age);
     }
+
+    public void testGC() {
+        System.out.println("执行实例方法：testGC: ");
+    }
 }
