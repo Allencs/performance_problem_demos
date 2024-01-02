@@ -11,11 +11,13 @@ public class TestRef {
             Object refTest = clazz.newInstance();
             Method method = clazz.getMethod("defaultMethod");
             clazz.getMethods();
-            Method method1 = clazz.getDeclaredMethod("defaultMethod");
-//            method.invoke(refTest);
+            Method method1 = clazz.getDeclaredMethod("showAge");
+            method.invoke(refTest);
             for (int i = 0; i < 100000; i++) {
-                Thread.sleep(500);
+                Thread.sleep(1000);
                 method.invoke(refTest);
+                // 每个方法都会创建一个GeneratedMethodAccessor
+                method1.invoke(refTest);
             }
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | NoSuchMethodException | InterruptedException | InvocationTargetException e) {
             e.printStackTrace();
