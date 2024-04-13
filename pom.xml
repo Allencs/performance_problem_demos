@@ -21,6 +21,11 @@
   </properties>
 
   <dependencies>
+    <dependency>
+      <groupId>com.github.oshi</groupId>
+      <artifactId>oshi-core</artifactId>
+      <version>5.8.2</version>
+    </dependency>
     <!-- log4j -->
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
