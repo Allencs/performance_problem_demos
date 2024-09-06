@@ -1,5 +1,6 @@
 package com.allen.utils;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -59,6 +60,15 @@ public class DateUtil {
         }
     }
 
+    public static long toMillis(String stringDate) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+        try {
+            return TimeUnit.MILLISECONDS.toMillis(sdf.parse(stringDate).getTime());
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     /**
      * 将字符串二进制转换成对应的long型数值
      * @param stringByte 字符串二进制
@@ -80,6 +90,11 @@ public class DateUtil {
 //        System.out.println(cal.getTimeInMillis());
         System.out.println(cal.getTimeInMillis()/1000);
 
+    }
+
+    public static String currentTime() {
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+        return df.format(new Date());
     }
 
     public static void main(String[] args) {
