@@ -52,6 +52,7 @@ public class TestJedisPool {
 
     public static void getSortedSet() {
         Jedis jedis = jedisPool.getResource();
+        jedis.zremrangeByRank("test:sorted:set", 0, 100);
         Set<String> set = jedis.zrange("test:sorted:set", 0, -1);
         List<SortedElement> list = set.stream().map(element -> JacksonUtil.from(element, SortedElement.class)).collect(Collectors.toList());
         System.out.println(list);

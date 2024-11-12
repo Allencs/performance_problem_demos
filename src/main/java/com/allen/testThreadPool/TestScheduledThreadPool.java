@@ -26,6 +26,6 @@ public class TestScheduledThreadPool {
             public void run() {
                 logger.info("执行定时任务");
             }
-        }, 1, 1, TimeUnit.SECONDS);
+        }, 1, 10, TimeUnit.SECONDS);
     }
 }

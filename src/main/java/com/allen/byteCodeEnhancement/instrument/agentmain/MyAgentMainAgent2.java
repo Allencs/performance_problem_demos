@@ -9,7 +9,7 @@ import java.lang.instrument.Instrumentation;
  * @Date: 2022/4/23 14:26
  * @Description: 借助Agent将instrument注入到正在运行的JVM中【动态字节码增强，Attach机制】
  **/
-public class MyAgentMainAgent {
+public class MyAgentMainAgent2 {
 
     public static void agentmain(String args, Instrumentation inst) {
         // 指定自己定义的Transformer，在其中利用Javassist做字节码替换
